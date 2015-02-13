@@ -1,0 +1,96 @@
+/*  ==========================================================================
+    Design Element: Colours Varibles
+    ========================================================================== */
+
+/*
+How to load a colour from the palette
+
+@see: http://erskinedesign.com/blog/friendlier-colour-names-sass-maps/
+*/
+
+$body-bg: #cccccc;
+$error-color: #f00 !default;
+
+@function palette($palette, $tone: 'base') {
+  @return map-get(map-get($palettes, $palette), $tone);
+}
+
+$palettes: (
+  /*
+  Grey Colours
+
+  palette(grey, ultralight) - #e1e8ef;
+  palette(grey, lightest) - #e1e8ef;
+  palette(grey, lighter) - #cdd7df;
+  palette(grey, light) - #9ba9b5;
+  palette(grey, base) - #6f7e8c;
+  palette(grey, dark) - #3c4c5b;
+  palette(grey, darker) - #232529;
+  palette(grey, active) - #61778c;
+
+
+  Styleguide Colours - Greys
+  */
+        grey: (
+                ultralight: #eff2f5,
+                lightest: #e1e8ef,
+                lighter: #cdd7df,
+                light: #9ba9b5,
+                base: #6f7e8c,
+                dark: #3c4c5b,
+                darker: #232529,
+                active: #61778c
+        ),
+
+  /*
+  Primary Colours
+
+  palette(primary, sapphire) - #0c345e;
+  palette(primary, smalt) - #014286;
+  palette(primary, denim) - #0c7dbb;
+  palette(primary, teal) - #036e8d;
+  palette(primary, irisBlue) - #06a3bf;
+  palette(primary, darkTurquoise) - #00c7de;
+  palette(primary, babyBlue) - #64faff;
+  palette(primary, bondiBlue) - #0696b0;
+  palette(primary, safetyOrange) - #FD5D01;
+  palette(primary, redOrange) - #f23c2e;
+  palette(primary, alizarin) - #D92F22;
+  palette(primary, amaranth) - #eb4a57;
+  palette(primary, mahogany) - #c13b46;
+  palette(primary, darkPink) - #f16279;
+  palette(primary, tawny) - #D44F03;
+  palette(primary, orangePeel)i - #ffa200;
+  palette(primary, goldenPoppy) - #f9c100;
+  palette(primary, darkGoldenRod) - #C89D08;
+  palette(primary, cherokke) - #f4d78f;
+  palette(primary, bianca) - #f9f6ee;
+  palette(primary, wheatField) - #e2dac3;
+
+  Styleguide Colours - Primary
+  */
+        primary:(
+                sapphire: #0c345e,
+                smalt: #014286,
+                denim: #0c7dbb,
+                teal: #036e8d,
+                irisBlue: #06a3bf,
+                darkTurquoise: #00c7de,
+                bondiBlue: #0696b0,
+                babyBlue: #64faff,
+                safetyOrange: #FD5D01,
+                redOrange: #f23c2e,
+                alizarin: #D92F22,
+                amaranth: #eb4a57,
+                mahogany: #c13b46,
+                darkPink: #f16279,
+                tawny: #D44F03,
+                orangePeel: #ffa200,
+                goldenPoppy: #f9c100,
+                darkGoldenRod: #C89D08,
+                cherokke: #f4d78f,
+                bianca: #f9f6ee,
+                wheatField: #e2dac3,
+        )
+
+);

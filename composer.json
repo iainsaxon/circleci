@@ -1,0 +1,26 @@
+{
+  "name": "nsm/circleci",
+  "license": "MIT",
+  "type": "project",
+  "authors": [
+    {
+      "name": "Leevi Graham",
+      "email": "leevi@newism.com.au"
+    }
+  ],
+  "require": {
+    "behat/mink-goutte-driver": "~1.1@dev",
+    "emuse/behat-html-formatter": "dev-master"
+  },
+  "require-dev": {
+    "phpspec/phpspec": "~2.1",
+    "behat/behat": "~3.0",
+    "behat/mink-extension": "~2.0",
+    "behat/mink-selenium2-driver": "~1.2",
+    "cevou/behat-screenshot-compare-extension": "~1.0@dev"
+  },
+  "minimum-stability": "dev",
+  "config": {
+    "bin-dir": "bin"
+  }
+}

@@ -1,0 +1,33 @@
+machine:
+  php:
+    version: 5.6.2
+  node:
+    version: 0.10.28
+  # services:
+  #   - rabbitmq-server
+  hosts:
+    local.circle: 127.0.0.1
+
+dependencies:
+  pre:
+    - cp config/php.ini ~/.phpenv/versions/$(phpenv global)/etc/conf.d/
+    - printf "\n" | pecl install imagick
+
+  post:
+    - cp config/apache.conf /etc/apache2/sites-available
+    - echo "export APACHE_RUN_USER=ubuntu" >> /etc/apache2/envvars
+    - echo "export APACHE_RUN_GROUP=ubuntu" >> /etc/apache2/envvars
+    - a2ensite apache.conf
+    - a2enmod rewrite
+    - sudo service apache2 restart
+
+test:
+  pre:
+    - ln -s src dist
+  override:
+    - bin/behat
+
+general:
+  artifacts:
+    - tests/reports
+    - tests/screenshots

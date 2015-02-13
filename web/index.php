@@ -1,0 +1,1 @@
+<?php require(__DIR__ . '/../app/views/default_site/src/site.group/layout.html');

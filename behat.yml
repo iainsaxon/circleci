@@ -1,0 +1,28 @@
+default:
+    suites:
+        web:
+            contexts:
+                - FeatureContext
+                - Cevou\Behat\ScreenshotCompareExtension\Context\ScreenshotCompareContext
+    formatters:
+        pretty: true
+        html:
+            output_path: %paths.base%/tests/reports/behat/html
+    extensions:
+        emuse\BehatHTMLFormatter\BehatHTMLFormatterExtension:
+            name: html
+        Behat\MinkExtension:
+            base_url:  'http://local.circle'
+            default_session: goutte
+            goutte: ~
+            browser_stack:
+                username: newbot1
+                access_key: pbCitBc3ZxWuaYgdPsPU
+        Cevou\Behat\ScreenshotCompareExtension:
+            screenshot_dir: %paths.base%/tests/screenshots
+            sessions:
+                default: ~
+            adapters:
+                default:
+                    local:
+                        directory: %paths.base%/error_screenshotstest
