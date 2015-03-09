@@ -10,11 +10,11 @@ machine:
 
 dependencies:
   pre:
-    - cp config/php.ini ~/.phpenv/versions/$(phpenv global)/etc/conf.d/
+    - cp etc/php/php.ini ~/.phpenv/versions/$(phpenv global)/etc/conf.d/
     - printf "\n" | pecl install imagick
 
   post:
-    - cp config/apache.conf /etc/apache2/sites-available
+    - cp /etc/apache2/apache.conf /etc/apache2/sites-available
     - echo "export APACHE_RUN_USER=ubuntu" >> /etc/apache2/envvars
     - echo "export APACHE_RUN_GROUP=ubuntu" >> /etc/apache2/envvars
     - a2ensite apache.conf
@@ -28,7 +28,7 @@ test:
     - bin/behat
 
 general:
-  build_dir: src
+  build_dir: var/www/example/src
   artifacts:
     - tests/reports
     - tests/screenshots

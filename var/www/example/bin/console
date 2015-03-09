@@ -1,0 +1,22 @@
+#!/usr/bin/env php
+<?php
+
+$debug = 0;
+
+$system_path = '../app/system';
+$documentRoot = __DIR__ . "/../web";
+$documentRoot = realpath($documentRoot);
+
+$parameters = json_decode(file_get_contents(__DIR__ . "/" . $system_path . "/../config/parameters.json"), true);
+
+// Spoof Server Variables
+$_SERVER = array_merge($_SERVER, $parameters['cli']['server']);
+$_SERVER['DOCUMENT_ROOT'] = $documentRoot;
+
+require(__DIR__ . '/../vendor/autoload.php');
+require(__DIR__ . '/../vendor/eecli/bootstrap/bootstrap-ee2.php');
+
+use Symfony\Component\Console\Application;
+
+$application = new Application();
+$application->run();

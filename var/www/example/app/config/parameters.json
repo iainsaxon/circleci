@@ -1,0 +1,34 @@
+{
+  "environment": {
+    "debug": true,
+    "env": "local",
+    "baseUrl": ""
+  },
+  "cli": {
+    "server": {
+      "REQUEST_SCHEME": "http",
+      "HTTP_HOST": "local.circle",
+      "REQUEST_URI": "/",
+      "REMOTE_ADDR": "127.0.0.1",
+      "HTTP_USER_AGENT": "eecli"
+    }
+  },
+  "database": {
+    "hostname": "localhost",
+    "username": "dbuser",
+    "password": "123",
+    "database": "dbname"
+  },
+  "config": {
+    "webmaster_email": "",
+    "webmaster_name": "",
+    "email_debug": "n"
+  },
+  "globalVariables": {
+    "gv_segmentio_write_key": "CXXnHA0Kz9FZ2btBZXNB2TnkdSUxwlEk",
+    "gv_disqus_short_name": "xxx",
+    "gv_disqus_api_key": "",
+    "gv_chartbeat_domain": "xxx",
+    "gv_google_tag_manager_key": "GTM-MW2QKH"
+  }
+}

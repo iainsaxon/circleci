@@ -1,10 +1,2 @@
-.idea/
-
-/app/config/parameters.json
-/var/cache
-/var/logs
-
-node_modules
-/vendor
-/bin
-/tests
+.idea
+.vagrant
