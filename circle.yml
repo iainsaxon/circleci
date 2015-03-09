@@ -28,6 +28,7 @@ test:
     - bin/behat
 
 general:
+  build_dir: src
   artifacts:
     - tests/reports
     - tests/screenshots

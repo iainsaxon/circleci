@@ -8,16 +8,23 @@
       "email": "leevi@newism.com.au"
     }
   ],
+  "repositories": [
+    {
+      "type": "vcs",
+      "url":  "git@github.com:leevigraham/eecli.git"
+    }
+  ],
   "require": {
-    "behat/mink-goutte-driver": "~1.1@dev",
-    "emuse/behat-html-formatter": "dev-master"
+    "eecli/eecli": "dev-master"
   },
   "require-dev": {
     "phpspec/phpspec": "~2.1",
     "behat/behat": "~3.0",
     "behat/mink-extension": "~2.0",
     "behat/mink-selenium2-driver": "~1.2",
-    "cevou/behat-screenshot-compare-extension": "~1.0@dev"
+    "emuse/behat-html-formatter": "dev-master",
+    "cevou/behat-screenshot-compare-extension": "~1.0@dev",
+    "behat/mink-goutte-driver": "~1.1@dev"
   },
   "minimum-stability": "dev",
   "config": {

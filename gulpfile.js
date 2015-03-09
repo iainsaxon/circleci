@@ -2,6 +2,8 @@
 
 var path = require('path');
 var del = require('del');
+var fs = require('fs');
+var wrench = require('wrench');
 
 // CLI Argument Parsing
 var minimist = require('minimist');
@@ -15,7 +17,7 @@ var autoprefixer = require('autoprefixer-core');
 var transform = require('vinyl-transform');
 
 var browserSync = require('browser-sync');
-var reload = browserSync.reload;
+//var reload = browserSync.reload;
 
 var browserify = require('browserify');
 
@@ -31,7 +33,8 @@ var paths = {
     themesProd: "web/themes/site_themes/" + siteName + "/" + target,
     views: "app/views/" + siteName,
     viewsSrc: "app/views/" + siteName + "/src",
-    viewsProd: "app/views/" + siteName + "/" + target
+    viewsProd: "app/views/" + siteName + "/" + target,
+    cache: ""
 };
 
 /**
@@ -58,33 +61,56 @@ gulp.task('styles', function () {
 /**
  * Converts icons into spritesheets
  */
-gulp.task('images:sprites', function () {
 
-    var spriteIconsSrc = paths.themesSrc + '/images/icons/**/*.png';
-    var retinaSpriteIconsSrc = paths.themesSrc + '/images/icons/**/*@2x.png';
+var spriteIcons1x = paths.themesSrc + '/images/icons/*@1x.png';
+var spriteIcons2x = paths.themesSrc + '/images/icons/*@2x.png';
+var spritePadding = 50;
 
-    var retinaSpriteData = gulp.src(retinaSpriteIconsSrc)
-        .pipe($.debug({title: 'retinaSpriteData:'}))
+gulp.task('images:sprite:icons@1x', function () {
+    var spriteData = gulp.src([spriteIcons1x])
+        .pipe($.debug({title: 'spriteIcons1x:'}))
         .pipe($.spritesmith({
-            imgName: 'images/sprite@2x.png',
-            cssName: 'scss/screen/_sprites.scss',
-            padding: 50
+            imgName: 'images/icon-sprite@1x.png',
+            imgPath: '../images/icon-sprite@1x.png',
+            cssName: 'scss/screen/_icon_sprite.scss',
+            padding: spritePadding,
+            cssTemplate: paths.themesSrc + '/scss/spritesmith-retina-mixins.template.mustache',
+            cssVarMap: function (sprite) {
+                sprite.name = sprite.name.replace("@1x", "");
+                sprite.image_2x = sprite.image.replace("@1x", "@2x");
+                sprite.escaped_image_2x = sprite.image_2x.replace(/['"\(\)\s]/g, function encodeCssUri (chr) {
+                    return '%' + chr.charCodeAt(0).toString(16);
+                });;
+            }
         }));
-
-    retinaSpriteData.pipe(gulp.dest(paths.themesSrc));
-
-    var spriteData = gulp.src([spriteIconsSrc, "!" + retinaSpriteIconsSrc])
-        .pipe($.debug({title: 'spriteData:'}))
-        .pipe($.spritesmith({
-            imgName: 'images/sprite.png',
-            imgPath: '../images/sprite.png',
-            cssName: 'scss/screen/_sprites.scss',
-            padding: 25,
-            cssTemplate: paths.themesSrc + '/scss/spritesmith-retina-mixins.template.mustache'
-        }));
-
-    spriteData.pipe(gulp.dest(paths.themesSrc));
+    spriteData.img.pipe(gulp.dest(paths.themesSrc));
+    spriteData.css.pipe(gulp.dest(paths.themesSrc));
 });
+
+gulp.task('images:sprite:icons@2x', function () {
+    var spriteData = gulp.src([spriteIcons2x])
+        .pipe($.debug({title: 'spriteIcons2x:'}))
+        .pipe($.spritesmith({
+            imgName: 'images/icon-sprite@2x.png',
+            imgPath: '../images/icon-sprite@2x.png',
+            padding: spritePadding * 2,
+            // This task filters out the sprite image
+            // so the name cssName and cssTemplate don't matter
+            // the template returns a blank string to speed up processing
+            cssName: 'scss/screen/_sprites@2x.scss',
+            cssTemplate: function(params){ return ''; }
+            //cssTemplate: paths.themesSrc + '/scss/spritesmith-retina-mixins.template.mustache',
+            //cssVarMap: function (sprite) {
+            //    sprite.name = sprite.name.replace("@2x", "");
+            //}
+        }));
+
+    return spriteData.img.pipe(gulp.dest(paths.themesSrc));
+});
+
+gulp.task('images:sprite:icons', ['images:sprite:icons@2x', 'images:sprite:icons@1x']);
+
+
 
 /**
  * Browserify scripts w/ sourcemaps
@@ -134,7 +160,7 @@ gulp.task('copy:scripts', ['scripts'], function () {
 /**
  * Copy images to production crushing as we go
  */
-gulp.task('copy:images', ['images:sprites'], function () {
+gulp.task('copy:images', function () {
     return gulp.src(paths.themesSrc + '/images/**/*')
         .pipe($.debug({title: 'copy:images:'}))
         .pipe($.cache($.imagemin({
@@ -222,20 +248,20 @@ gulp.task("revReplace:themeAssets", function () {
 gulp.task('browserSync', function () {
     browserSync({
         notify: true,
-        proxy: "local.circle"
+        proxy: "newism.com.au"
     });
 });
 
 /**
  * Watch these files for changes and reload browsersync
  */
-gulp.watch([
-    paths.viewsSrc + '/**/*.html',
-    paths.themesSrc + '/scripts/**/*.js',
-    paths.themesSrc + '/styles/**/*.css',
-    paths.themesSrc + '/images/**/*',
-    paths.themesSrc + '/fonts/**/*'
-]).on('change', reload);
+//gulp.watch([
+//    paths.viewsSrc + '/**/*.html',
+//    paths.themesSrc + '/scripts/**/*.js',
+//    paths.themesSrc + '/styles/**/*.css',
+//    paths.themesSrc + '/images/**/*',
+//    paths.themesSrc + '/fonts/**/*'
+//]).on('change', reload);
 
 /**
  * Run jshint to validate javascripts
@@ -276,6 +302,27 @@ gulp.task('wiredep', function () {
  * Clean production directories
  */
 gulp.task('clean', del.bind(null, [paths.themesProd, paths.viewsProd]));
+
+gulp.task('setPermissions:config', function () {
+    return gulp.src([
+        'app/system/expressionengine/config/config.php',
+        'app/system/expressionengine/config/database.php'
+    ])
+        .pipe($.debug({title: 'setPermissions:'}))
+        .pipe($.chmod(666))
+        .pipe(gulp.dest('app/system/expressionengine/config'))
+        .pipe($.debug({title: 'setPermissions:'}))
+        ;
+});
+
+gulp.task('setPermissions:cache', function(){
+    wrench.chmodSyncRecursive('app/system/expressionengine/cache', '0775');
+    wrench.chmodSyncRecursive('var/cache', '0775')
+});
+
+gulp.task('setPermissions:logs', function(){
+    wrench.chmodSyncRecursive('var/logs', '0775')
+});
 
 /**
  * Build production assets

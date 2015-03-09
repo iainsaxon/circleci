@@ -1,0 +1,111 @@
+$sprite-map: (
+	ArrowCircleDown-blue-small: (
+		offset-x: 0px,
+		offset-y: 0px,
+		width: 30px,
+		height: 30px,
+		total-width: 110px,
+		total-height: 30px,
+		image1x: '../images/icon-sprite@1x.png',
+		image2x: '../images/icon-sprite@2x.png'
+	),
+	ArrowCircleUp-blue-small: (
+		offset-x: -80px,
+		offset-y: 0px,
+		width: 30px,
+		height: 30px,
+		total-width: 110px,
+		total-height: 30px,
+		image1x: '../images/icon-sprite@1x.png',
+		image2x: '../images/icon-sprite@2x.png'
+	),
+);
+
+$spritesheet: (
+  name: 'spritesheet',
+  width: 110px,
+  height: 30px,
+  image1x: '../images/icon-sprite@1x.png',
+  image2x: str-slice('../images/icon-sprite@1x.png', 1, str-index('../images/icon-sprite@1x.png', '@1x.png') - 1) + '@2x.png'
+);
+
+@mixin spritesheet-background-size() {
+  background-size: map-get($spritesheet, 'width') map-get($spritesheet, 'height');
+}
+
+@mixin sprite-width($sprite) {
+  $sprite-data: map-get($sprite-map, $sprite);
+  width: map-get($sprite-data, 'width');
+}
+
+@mixin sprite-height($sprite) {
+  $sprite-data: map-get($sprite-map, $sprite);
+  height: map-get($sprite-data, 'height');
+}
+
+@mixin sprite-background-position($sprite) {
+  $sprite-data: map-get($sprite-map, $sprite);
+  background-position: map-get($sprite-data, 'offset-x') map-get($sprite-data, 'offset-y');
+}
+
+@mixin sprite-background-image($sprite) {
+  $spritesheet-path: map-get($spritesheet, 'image2x');
+  background-image: url($spritesheet-path);
+}
+
+@mixin sprite-background-image-2x() {
+  $spritesheet-path: map-get($spritesheet, 'image2x');
+  background-image: url($spritesheet-path);
+}
+
+@mixin sprite($sprite, $size: true, $mediaQuery: false) {
+
+  @include sprite-background-image($sprite);
+  @include sprite-background-position($sprite);
+
+  background-repeat: no-repeat;
+
+  @if $size {
+    @include sprite-width($sprite);
+    @include sprite-height($sprite);
+  }
+
+  @if $mediaQuery {
+    @include sprite-2x($sprite);
+  }
+}
+
+@mixin sprite-2x() {
+  @media only screen and (-webkit-min-device-pixel-ratio: 2),
+    only screen and (min--moz-device-pixel-ratio: 2),
+    only screen and (-o-min-device-pixel-ratio: 2/1),
+    only screen and (min-device-pixel-ratio: 2),
+    only screen and (min-resolution: 192dpi),
+    only screen and (min-resolution: 2dppx
+  ) {
+
+    @include spritesheet-background-size();
+    @include sprite-background-image-2x();
+
+  }
+}
+
+
+@mixin Icon {
+	display:inline-block;
+	background-repeat: no-repeat;
+	vertical-align:top;
+    
+    @include sprite-2x();
+}
+
+.Icon {
+	@include Icon;
+}
+
+.Icon--ArrowCircleDown-blue-small {
+	@include sprite(ArrowCircleDown-blue-small);
+}
+.Icon--ArrowCircleUp-blue-small {
+	@include sprite(ArrowCircleUp-blue-small);
+}

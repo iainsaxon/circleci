@@ -3,7 +3,3 @@ body {
   background-color: palette(primary, bondiBlue);
   height: 2000px;
 }
-
-.example-icon {
-  @include sprite('ArrowCircleDown-blue-small');
-}

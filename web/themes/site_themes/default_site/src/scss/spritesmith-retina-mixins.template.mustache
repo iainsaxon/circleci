@@ -1,4 +1,4 @@
-$sprite: (
+$sprite-map: (
 	{{#items}}
 	{{name}}: (
 		offset-x: {{px.offset_x}},
@@ -7,66 +7,88 @@ $sprite: (
 		height: {{px.height}},
 		total-width: {{px.total_width}},
 		total-height: {{px.total_height}},
-		image: '{{{escaped_image}}}'
+		image1x: '{{{escaped_image}}}',
+		image2x: '{{{escaped_image_2x}}}'
 	),
 	{{/items}}
 );
 
-@mixin sprite-size($image) {
-	background-size: map-get(map-get($sprite, $image), 'total-width') map-get(map-get($sprite, $image), 'total-height');
+$spritesheet: (
+  name: '{{spritesheet_name}}',
+  width: {{spritesheet.px.width}},
+  height: {{spritesheet.px.height}},
+  image1x: '{{{spritesheet.image}}}',
+  image2x: str-slice('{{{spritesheet.image}}}', 1, str-index('{{{spritesheet.image}}}', '@1x.png') - 1) + '@2x.png'
+);
+
+@mixin spritesheet-background-size() {
+  background-size: map-get($spritesheet, 'width') map-get($spritesheet, 'height');
 }
 
-@mixin sprite-width($image) {
-	width: map-get(map-get($sprite, $image), 'width');
+@mixin sprite-width($sprite) {
+  $sprite-data: map-get($sprite-map, $sprite);
+  width: map-get($sprite-data, 'width');
 }
 
-@mixin sprite-height($image) {
-	height: map-get(map-get($sprite, $image), 'height');
+@mixin sprite-height($sprite) {
+  $sprite-data: map-get($sprite-map, $sprite);
+  height: map-get($sprite-data, 'height');
 }
 
-@mixin sprite-position($image) {
-	background-position: map-get(map-get($sprite, $image), 'offset-x') map-get(map-get($sprite, $image), 'offset-y');
+@mixin sprite-background-position($sprite) {
+  $sprite-data: map-get($sprite-map, $sprite);
+  background-position: map-get($sprite-data, 'offset-x') map-get($sprite-data, 'offset-y');
 }
 
-@mixin sprite-image($image) {
-	background-image: url(map-get(map-get($sprite, $image), 'image'));
+@mixin sprite-background-image($sprite) {
+  $spritesheet-path: map-get($spritesheet, 'image2x');
+  background-image: url($spritesheet-path);
 }
 
-@mixin sprite-image-retina($image) {
-	$image-path: map-get(map-get($sprite, $image), 'image');
-	$image-path-retina: str-slice($image-path, 1, str-index($image-path, '.png') - 1) + '@2x.png';
-
-	background-image: url($image-path-retina);
+@mixin sprite-background-image-2x() {
+  $spritesheet-path: map-get($spritesheet, 'image2x');
+  background-image: url($spritesheet-path);
 }
 
-@mixin sprite($image, $size: true) {
-	@include sprite-image($image);
-	@include sprite-position($image);
-	background-repeat: no-repeat;
+@mixin sprite($sprite, $size: true, $mediaQuery: false) {
 
-	@if $size {
-		@include sprite-width($image);
-		@include sprite-height($image);
-	}
+  @include sprite-background-image($sprite);
+  @include sprite-background-position($sprite);
 
-	@media
-		only screen and (-webkit-min-device-pixel-ratio: 2),
-		only screen and (   min--moz-device-pixel-ratio: 2),
-		only screen and (     -o-min-device-pixel-ratio: 2/1),
-		only screen and (        min-device-pixel-ratio: 2),
-		only screen and (                min-resolution: 192dpi),
-		only screen and (                min-resolution: 2dppx) {
+  background-repeat: no-repeat;
 
-		@include sprite-size($image);
-		@include sprite-image-retina($image);
+  @if $size {
+    @include sprite-width($sprite);
+    @include sprite-height($sprite);
+  }
 
-	}
+  @if $mediaQuery {
+    @include sprite-2x($sprite);
+  }
 }
+
+@mixin sprite-2x() {
+  @media only screen and (-webkit-min-device-pixel-ratio: 2),
+    only screen and (min--moz-device-pixel-ratio: 2),
+    only screen and (-o-min-device-pixel-ratio: 2/1),
+    only screen and (min-device-pixel-ratio: 2),
+    only screen and (min-resolution: 192dpi),
+    only screen and (min-resolution: 2dppx
+  ) {
+
+    @include spritesheet-background-size();
+    @include sprite-background-image-2x();
+
+  }
+}
+
 
 @mixin Icon {
 	display:inline-block;
 	background-repeat: no-repeat;
 	vertical-align:top;
+    
+    @include sprite-2x();
 }
 
 .Icon {
