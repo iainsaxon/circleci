@@ -87,7 +87,7 @@ class Assets_ee_file extends Assets_base_file
 	{
 		if (! isset($this->url))
 		{
-			$this->url = $this->filedir->url . str_replace(' ', '%20', $this->subpath);;
+			$this->url = $this->filedir->url . str_replace(' ', '%20', $this->subpath);
 		}
 
 		$url = $this->url;
@@ -95,6 +95,22 @@ class Assets_ee_file extends Assets_base_file
 		{
 			$url = $this->_inject_manipulation_path($url, $manipulation_name);
 		}
+
+		return $url;
+	}
+
+	/**
+	 * Revved URL
+	 */
+	function revved_url()
+	{
+		if (! isset($this->url))
+		{
+			$this->url = $this->filedir->url . str_replace(' ', '%20', $this->subpath);
+		}
+
+		$url = $this->url;
+		$url = $this->_inject_last_modified($url);
 
 		return $url;
 	}
@@ -237,6 +253,19 @@ class Assets_ee_file extends Assets_base_file
 		$parts = explode("/", $path);
 		$final_part = array_pop($parts);
 		return join("/", $parts) . '/_' . $manipulation_name . '/' . $final_part;
+	}
+
+	/**
+	 * Inject last modified into path
+	 *
+	 * @param $path
+	 * @return string
+	 */
+	private function _inject_last_modified($path)
+	{
+		$parts = explode(".", $path);
+		$final_part = array_pop($parts);
+		return join(".", $parts) . '.' . $this->row['date_modified'] . '.' . $final_part;
 	}
 
 	/**
