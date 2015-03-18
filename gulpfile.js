@@ -4,6 +4,7 @@ var path = require('path');
 var del = require('del');
 var fs = require('fs');
 var wrench = require('wrench');
+var chalk = require('chalk');
 
 // CLI Argument Parsing
 var minimist = require('minimist');
@@ -13,11 +14,7 @@ var gulp = require('gulp');
 var $ = require('gulp-load-plugins')();
 
 var runSequence = require('run-sequence');
-var autoprefixer = require('autoprefixer-core');
 var transform = require('vinyl-transform');
-
-var browserSync = require('browser-sync');
-//var reload = browserSync.reload;
 
 var browserify = require('browserify');
 
@@ -25,15 +22,17 @@ var browserify = require('browserify');
 var options = minimist(process.argv.slice(2));
 var siteName = options.siteName || "default_site";
 var target = options.target || "prod";
+var isProduction = options.production || options.prod || false;
+var isDebug = options.debug || false;
 
 // Path Config
 var paths = {
     themes: "web/themes/site_themes/" + siteName,
-    themesSrc: "web/themes/site_themes/" + siteName + "/src",
-    themesProd: "web/themes/site_themes/" + siteName + "/" + target,
+    themesSrc: "web/themes/site_themes/src/" + siteName,
+    themesProd: "web/themes/site_themes/" + target + "/" + siteName,
     views: "app/views/" + siteName,
-    viewsSrc: "app/views/" + siteName + "/src",
-    viewsProd: "app/views/" + siteName + "/" + target,
+    viewsSrc: "app/views/src/" + siteName,
+    viewsProd: "app/views/"  + target + "/" + siteName,
     cache: ""
 };
 
@@ -41,8 +40,12 @@ var paths = {
  * Parses .scss into .css w/ sourcemaps & autoprefixer
  */
 gulp.task('styles', function () {
+
+    var autoprefixer = require('autoprefixer-core');
+
     return gulp.src(paths.themesSrc + '/scss/*.scss')
-        .pipe($.debug({title: 'styles:'}))
+        .pipe($.if(isDebug, $.debug({title: 'styles:'})))
+        .pipe($.if(isProduction, $.scssLint()))
         .pipe($.sourcemaps.init())
         .pipe($.sass({
             outputStyle: 'nested', // libsass doesn't support expanded yet
@@ -110,8 +113,6 @@ gulp.task('images:sprite:icons@2x', function () {
 
 gulp.task('images:sprite:icons', ['images:sprite:icons@2x', 'images:sprite:icons@1x']);
 
-
-
 /**
  * Browserify scripts w/ sourcemaps
  */
@@ -123,13 +124,29 @@ gulp.task('scripts', function () {
     });
 
     return gulp.src(paths.themesSrc + '/scripts/app.js')
-        .pipe($.debug({title: 'scripts:'}))
+        .pipe($.if(isDebug, $.debug({title: 'scripts:'})))
         .pipe(browserified)
         .pipe($.sourcemaps.init())
-        // Add transformation tasks to the pipeline here.
-        .pipe($.uglify())
+        .pipe($.if(isProduction, $.uglify()))
         .pipe($.sourcemaps.write())
         .pipe($.rename("bundled.js"))
+        .pipe(gulp.dest(paths.themesSrc + '/scripts'))
+        ;
+});
+
+gulp.task('scripts:compile-bower-scripts', function () {
+
+    return gulp.src(require('main-bower-files')({
+            filter: '**/*.js'
+        }))
+        .pipe($.if(isDebug, $.debug({title: 'scripts:compile-bower-scripts'})))
+        .pipe($.sourcemaps.init())
+        // Add transformation tasks to the pipeline here.
+        .pipe($.size())
+        .pipe($.if(isProduction, $.uglify()))
+        .pipe($.sourcemaps.write())
+        .pipe($.concat('bundled-bower.js'))
+        .pipe($.size())
         .pipe(gulp.dest(paths.themesSrc + '/scripts'))
         ;
 });
@@ -140,7 +157,7 @@ gulp.task('scripts', function () {
 gulp.task('copy:styles', ['styles'], function () {
     return gulp.src(paths.themesSrc + '/styles/*.css')
         .pipe($.plumber())
-        .pipe($.debug({title: 'copy:styles:'}))
+        .pipe($.if(isDebug, $.debug({title: 'copy:styles:'})))
         .pipe($.replace(/themes\/src/g, 'themes/' + target))
         .pipe(gulp.dest(paths.themesProd + '/styles'))
         ;
@@ -151,7 +168,7 @@ gulp.task('copy:styles', ['styles'], function () {
  */
 gulp.task('copy:scripts', ['scripts'], function () {
     return gulp.src(paths.themesSrc + '/scripts/**/*.js')
-        .pipe($.debug({title: 'copy:scripts:'}))
+        .pipe($.if(isDebug, $.debug({title: 'copy:scripts:'})))
         .pipe($.replace(/themes\/src/g, 'themes/' + target))
         .pipe(gulp.dest(paths.themesProd + '/scripts'))
         ;
@@ -162,7 +179,7 @@ gulp.task('copy:scripts', ['scripts'], function () {
  */
 gulp.task('copy:images', function () {
     return gulp.src(paths.themesSrc + '/images/**/*')
-        .pipe($.debug({title: 'copy:images:'}))
+        .pipe($.if(isDebug, $.debug({title: 'copy:images:'})))
         .pipe($.cache($.imagemin({
             progressive: true,
             interlaced: true,
@@ -181,7 +198,7 @@ gulp.task('copy:fonts', function () {
         filter: '**/*.{eot,svg,ttf,woff,woff2}'
     })
         .concat(paths.themesSrc + '/fonts/**/*'))
-        .pipe($.debug({title: 'copy:fonts:'}))
+        .pipe($.if(isDebug, $.debug({title: 'copy:fonts:'})))
         .pipe(gulp.dest(paths.themesProd + '/fonts'));
 });
 
@@ -191,7 +208,7 @@ gulp.task('copy:fonts', function () {
 gulp.task('copy:html', function () {
 
     return gulp.src(paths.viewsSrc + '/**/*')
-        .pipe($.debug({title: 'copy:html:'}))
+        .pipe($.if(isDebug, $.debug({title: 'copy:html:'})))
         .pipe($.replace(/themes\/src/g, 'themes/' + target))
         .pipe(gulp.dest(paths.viewsProd));
 });
@@ -208,7 +225,7 @@ gulp.task('rev', function () {
         paths.themesProd + "/images/**/*.*",
         paths.themesProd + "/fonts/**/*.{eot,svg,ttf,woff,woff2}"
     ], {base: path.join(process.cwd(), paths.themesProd)})
-        .pipe($.debug({title: 'rev:'}))
+        .pipe($.if(isDebug, $.debug({title: 'rev:'})))
         .pipe($.rev())
         .pipe(gulp.dest(paths.themesProd))  // write rev'd assets to build dir
         .pipe($.rev.manifest())
@@ -222,7 +239,7 @@ gulp.task("revReplace:html", function () {
     var manifest = gulp.src(paths.themesProd + "/rev-manifest.json");
 
     return gulp.src(paths.viewsProd + '/**/*.html')
-        .pipe($.debug({title: 'revReplace:html:'}))
+        .pipe($.if(isDebug, $.debug({title: 'revReplace:html:'})))
         .pipe($.revReplace({manifest: manifest}))
         .pipe(gulp.dest(paths.viewsProd));
 });
@@ -237,7 +254,7 @@ gulp.task("revReplace:themeAssets", function () {
         paths.themesProd + '/styles/**/*.css',
         paths.themesProd + '/scripts/**/*.js'
     ], {base: paths.themesProd + "/"})
-        .pipe($.debug({title: 'revReplace:themeAssets:'}))
+        .pipe($.if(isDebug, $.debug({title: 'revReplace:themeAssets:'})))
         .pipe($.revReplace({manifest: manifest}))
         .pipe(gulp.dest(paths.themesProd));
 });
@@ -246,22 +263,29 @@ gulp.task("revReplace:themeAssets", function () {
  * Fireup browsersync syncing all assets across browsers
  */
 gulp.task('browserSync', function () {
+
+    var browserSync = require('browser-sync');
+    var reload = browserSync.reload;
+
     browserSync({
         notify: true,
-        proxy: "newism.com.au"
+        proxy: "local.example.com"
     });
+
+    /**
+     * Watch these files for changes and reload browsersync
+     */
+    gulp.watch([
+        paths.viewsSrc + '/**/*.html',
+        paths.themesSrc + '/scripts/**/*.js',
+        paths.themesSrc + '/styles/**/*.css',
+        paths.themesSrc + '/images/**/*',
+        paths.themesSrc + '/fonts/**/*'
+    ]).on('change', reload);
+
 });
 
-/**
- * Watch these files for changes and reload browsersync
- */
-//gulp.watch([
-//    paths.viewsSrc + '/**/*.html',
-//    paths.themesSrc + '/scripts/**/*.js',
-//    paths.themesSrc + '/styles/**/*.css',
-//    paths.themesSrc + '/images/**/*',
-//    paths.themesSrc + '/fonts/**/*'
-//]).on('change', reload);
+
 
 /**
  * Run jshint to validate javascripts
@@ -269,13 +293,14 @@ gulp.task('browserSync', function () {
 gulp.task('jshint', function () {
     return gulp.src([
         paths.themesSrc + '/scripts/**/*.js',
-        "!" + paths.themesSrc + '/scripts/bundled.js'
+        "!" + paths.themesSrc + '/scripts/bundled.js',
+        "!" + paths.themesSrc + '/scripts/bundled-bower.js'
     ])
-        .pipe($.debug({title: 'jshint:'}))
+        .pipe($.if(isDebug, $.debug({title: 'jshint:'})))
         //.pipe(reload({stream: true, once: true}))
         .pipe($.jshint())
         .pipe($.jshint.reporter('jshint-stylish'))
-        .pipe($.if(!browserSync.active, $.jshint.reporter('fail')));
+        .pipe($.jshint.reporter('fail'));
 });
 
 /**
@@ -308,7 +333,7 @@ gulp.task('setPermissions:config', function () {
         'app/system/expressionengine/config/config.php',
         'app/system/expressionengine/config/database.php'
     ])
-        .pipe($.debug({title: 'setPermissions:'}))
+        .pipe($.if(isDebug, $.debug({title: 'setPermissions:'})))
         .pipe($.chmod(666))
         .pipe(gulp.dest('app/system/expressionengine/config'))
         .pipe($.debug({title: 'setPermissions:'}))
@@ -328,6 +353,9 @@ gulp.task('setPermissions:logs', function(){
  * Build production assets
  */
 gulp.task('build', function (callback) {
+
+    $.util.log(chalk.green('Building Target: ' + target + ' isProduction: ' + isProduction));
+
     runSequence(
         'jshint',
         'clean',

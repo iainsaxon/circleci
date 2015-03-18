@@ -1,0 +1,62 @@
+{layout='site/-layout'}
+
+{exp:channel:entries
+    channel="promotions"
+    limit="1"
+    dynamic="yes"
+    require_entry="yes"
+    disable="categories|member_data|pagination"
+}
+
+{if no_results}{redirect="404"}{/if}
+
+{!-- Set entry id for better meta --}
+{layout:set name="entry_id" value="{entry_id}"}
+{layout:set name="title_suffix" value="Promotions"}
+
+{!-- Additional Open Graph meta
+{layout:set name="og_image" value="{cf_promotion_feature_image:revved_url:facebook-2x}"}
+{layout:set name="og_image:height" value="{cf_promotion_feature_image:height:facebook-2x}"}
+{layout:set name="og_image:width" value="{cf_promotion_feature_image:width:facebook-2x}"}
+--}
+
+{embed='site/-breadcrumb'
+    topic_url='{topic_category_url_title}'
+    topic_name='{topic_category_name}'
+    content_type_url='promotions'
+    content_type_name='Promotions'
+}
+
+{embed='advertisement/-ad-placeholder' ad_search_query='{cf_promotion_ad_search_query}' topic_category_id='{topic_category_id}'}
+
+<h1>{title}</h1>
+
+{cf_promotion_content}
+
+{if cf_promotion_feature_image}
+    <img
+        src="{cf_promotion_feature_image:revved_url:feature-1x}"
+        width="{cf_promotion_feature_image:width:feature-1x}"
+        height="{cf_promotion_feature_image:height:feature-1x}"
+        srcset="{cf_promotion_feature_image:revved_url:feature-2x} 2x"
+    />
+    {if cf_promotion_feature_video}
+    <iframe id="player"
+            type="text/html"
+            width="1024"
+            height="576"
+            src="http://www.youtube.com/embed/{cf_promotion_feature_video}?enablejsapi=1&origin=http://example.com"
+            frameborder="0">
+    </iframe>
+    {/if}
+{/if}
+
+{embed='comments/_form-create' href='{url_title_path='promotions/details'}'}
+
+<h2>Related Products</h2>
+{embed='articles/-entries' entry_id='{exp:nsm_utils:relationship_child_ids entry_id="{entry_id}" field="cf_promotions_related_products"}|-1'}
+
+<h2>Related Articles</h2>
+{embed='articles/-entries' entry_id='{exp:nsm_utils:relationship_child_ids entry_id="{entry_id}" field="cf_promotions_related_articles"}|-1'}
+
+{/exp:channel:entries}

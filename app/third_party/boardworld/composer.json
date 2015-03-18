@@ -1,0 +1,17 @@
+{
+    "name": "nsm/boardworld",
+    "authors": [
+        {
+            "name": "Leevi Graham",
+            "email": "leevi@newism.com.au"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Boardworld\\": "src/"
+        }
+    },
+    "require": {
+        "eecli/eecli": "dev-master"
+    }
+}

@@ -9,6 +9,7 @@
 <div id="fm-header" class="logged{if logged_out}-out{/if}{if logged_in}-in{/if}">
 	<h1><strong>{forum_name}</strong></h1>
 
+    <!--
 	<div id="fm-main-navigation">
 		<ul>
 			<li><a href="#">Home</a></li>
@@ -19,7 +20,10 @@
 			<li><a href="#">Item</a></li>
 			<li><a href="#">And One More</a></li>
 		</ul>
-	</div><div id="fm-crumbs">
+	</div>
+	-->
+	<div id="fm-crumbs">
 		{include:quick_search_form}
-		<p>You are here: <a href="/">Home</a> :: {include:breadcrumb}</p></div>
+		<p>You are here: <a href="/">Home</a> :: {include:breadcrumb}</p>
+    </div>
 </div> <!-- "fm-header -->

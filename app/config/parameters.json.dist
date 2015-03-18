@@ -1,0 +1,42 @@
+{
+    "environment": {
+        "debug": true,
+        "env": "local",
+        "baseUrl": ""
+    },
+    "cli": {
+        "server": {
+            "REQUEST_SCHEME": "http",
+            "HTTP_HOST": "local.example",
+            "REQUEST_URI": "/",
+            "REMOTE_ADDR": "127.0.0.1",
+            "HTTP_USER_AGENT": "eecli"
+        }
+    },
+    "database": {
+        "hostname": "localhost",
+        "username": "root",
+        "password": "",
+        "database": "example"
+    },
+    "config": {
+        "webmaster_email": "",
+        "webmaster_name": "",
+        "email_debug": "y",
+        "mail_protocol": "smtp",
+        "smtp_server": "mailtrap.io",
+        "smtp_port": "25",
+        "smtp_username": "",
+        "smtp_password": ""
+    },
+    "globalVariables": {
+        "gv_facebook_app_id": "xxx",
+        "gv_facebook_admins": "xxx|xxx",
+        "gv_segmentio_write_key": "CXXnHA0Kz9FZ2btBZXNB2TnkdSUxwlEk",
+        "gv_disqus_short_name": "xxx",
+        "gv_disqus_api_key": "",
+        "gv_chartbeat_domain": "xxx",
+        "gv_google_tag_manager_key": "xxx-xxxxx",
+        "gv_cm_subscriber_list_key": "xxx"
+    }
+}

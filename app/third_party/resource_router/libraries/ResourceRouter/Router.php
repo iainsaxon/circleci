@@ -10,7 +10,7 @@ class Router {
 	 * List of routes
 	 *
 	 * 'this/is/a/uri/:any' => 'template_group/template_name',
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $routes = array();
@@ -47,7 +47,7 @@ class Router {
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param  string $uri_string
 	 * @return void
 	 */
@@ -209,7 +209,7 @@ class Router {
 					{
 						$this->wildcards[$index] = new Wildcard($this, $index, $segment, $type);
 					}
-					
+
 					//if it wasn't a callback (where it's assumed you ran your own validation),
 					//validate all the wildcards and bail if it fails
 					if ( ! is_callable($template) && ! $this->wildcards[$index]->isValid())
@@ -291,7 +291,7 @@ class Router {
 
 	/**
 	 * Does this route match a page URI?
-	 * 
+	 *
 	 * @return boolean
 	 */
 	public function isPage()
@@ -311,7 +311,7 @@ class Router {
 		// a) a slash
 		// b) a dot
 		// c) a valid protocol (eg. http://)
-		// 
+		//
 		// assume it's a EE template url
 		if ( ! preg_match('#^(/|\.|[a-z]+://)#', $url))
 		{
@@ -336,7 +336,7 @@ class Router {
 	 * Send this data as a JSON response
 	 *
 	 * return $router->json(array('foo' => 'bar'));
-	 * 
+	 *
 	 * @param  mixed $data
 	 * @return void
 	 */
@@ -369,7 +369,7 @@ class Router {
 
 	/**
 	 * Get the matched wildcards
-	 * 
+	 *
 	 * @return array
 	 */
 	public function wildcards()
@@ -379,7 +379,7 @@ class Router {
 
 	/**
 	 * Get the specified matched wildcard
-	 * 
+	 *
 	 * @param  int $which the wildcard index
 	 * @return mixed|null null if doesn't exist
 	 */
@@ -392,7 +392,7 @@ class Router {
 	 * Output a string that will be output as the body content for this router endpoint
 	 *
 	 * $router->output('Hello world!');
-	 * 
+	 *
 	 * @param string $output
 	 */
 	public function output($output = '')
@@ -440,7 +440,7 @@ class Router {
 		{
 			ee()->output->_display();
 		}
-		
+
 		ee()->hooks->_call_hook('post_system');
 
 		if (class_exists('CI_DB') AND isset(ee()->db))
@@ -461,9 +461,9 @@ class Router {
 	{
 		//all the conditions to trigger a 404 in the TMPL class
 		$hidden_template_indicator = ee()->config->item('hidden_template_indicator') ?: '.';
-		
+
 		ee()->uri->page_query_string = '';
-		
+
 		ee()->config->set_item('hidden_template_404', 'y');
 
 		$this->templateGroup = $hidden_template_indicator;
@@ -474,7 +474,7 @@ class Router {
 	 * Set the HTTP Content-Type header
 	 *
 	 * $router->setContentType('application/json');
-	 * 
+	 *
 	 * @param string $content_type
 	 * @return this
 	 */
@@ -489,7 +489,7 @@ class Router {
 	 * Set a global template variable
 	 *
 	 * $router->setGlobal
-	 * 
+	 *
 	 * @param string $key   the variable name
 	 * @param string|bool|int $value
 	 * @return this
@@ -510,7 +510,7 @@ class Router {
 	 *
 	 * $router->setHeader('Content-Type: application/json');
 	 * $router->setHeader('Content-Type', 'application/json');
-	 * 
+	 *
 	 * @param string $header the full header string if using one parameter, the header name if using two parameters
 	 * @param string $content [optional] the header content if using two parameters
 	 * @return this
@@ -533,7 +533,7 @@ class Router {
 	 * Set an HTTP status code
 	 *
 	 * $router->setHttpStatus(401);
-	 * 
+	 *
 	 * @param int $code a valid HTTP status code
 	 * @return this
 	 */
@@ -551,7 +551,7 @@ class Router {
 	 * Set the EE output class type
 	 *
 	 * $router->setOutputType('css');
-	 * 
+	 *
 	 * @param string $type one of the following: webpage, css, js, json, xml, feed, 404
 	 * @return this
 	 */
@@ -566,7 +566,7 @@ class Router {
 	 * Set the template to use for this router endpoint
 	 *
 	 * $router->setTemplate('foo/bar');
-	 * 
+	 *
 	 * @param string $template a template_group/template_name pair
 	 * @return this
 	 */
@@ -605,7 +605,7 @@ class Router {
 	 * $router->setVariable('foo', array(array('bar' => 1, 'baz' => 2), array('bar' => 3, 'baz' => 4)));
 	 *
 	 * {exp:resource_router:foo}{bar}-{baz}|{/exp:resource_router:foo} -> 1-2|3-4
-	 * 
+	 *
 	 * @param string $name the key or identifier of the variable
 	 * @param string|array $data an array for a tag pair or a single value
 	 * @return this
@@ -638,7 +638,7 @@ class Router {
 
 	/**
 	 * Get the set template
-	 * 
+	 *
 	 * @return mixed
 	 */
 	public function template()
@@ -667,7 +667,7 @@ class Router {
 
 	/**
 	 * Get the specified set variable
-	 * 
+	 *
 	 * @param  string $which the variable key
 	 * @return mixed|false false if doesn't exist
 	 */

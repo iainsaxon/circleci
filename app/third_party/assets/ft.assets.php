@@ -1900,6 +1900,14 @@ class Assets_ft extends EE_Fieldtype
 	}
 
 	/**
+	 * Replace Revved URL
+	 */
+	function replace_revved_url($data, $params)
+	{
+		return $data[0]->revved_url();
+	}
+
+	/**
 	 * Replace Server Path
 	 */
 	function replace_server_path($data, $params)

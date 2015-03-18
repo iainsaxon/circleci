@@ -323,6 +323,7 @@ class EE_Template {
 
 				$this->template = str_replace(LD.$key.RD, $replace, $this->template);
 			}
+            unset($val);
 		}
 
 		// have to handle the silly in_group() conditionals before we
@@ -349,8 +350,8 @@ class EE_Template {
 		// Parse {embed} tag variables
 		if ($is_embed === TRUE && count($this->embed_vars) > 0)
 		{
-			$this->log_item("Embed Variables (Keys): ".implode('|', array_keys($this->embed_vars)));
-			$this->log_item("Embed Variables (Values): ".trim(implode('|', $this->embed_vars)));
+			$this->log_item("Embed Variables (Keys): ".implode('*', array_keys($this->embed_vars)));
+			$this->log_item("Embed Variables (Values): ".trim(implode('*', $this->embed_vars)));
 
 			foreach ($this->embed_vars as $key => $val)
 			{

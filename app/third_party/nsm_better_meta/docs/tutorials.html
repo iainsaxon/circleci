@@ -1,0 +1,162 @@
+<h2 id="render-default-site-meta">Render default site meta</h2>
+<p>Rendering the default meta template and data to your template is as easy as adding <code class="tag">&#123;exp:nsm_better_meta:template&#125;</code> to your template. The default meta values can be overridden using the <a href="./tag-reference#exp:nsm_better_meta:template.parameters">tag parameters</a>.</p>
+
+<h2 id="render-entry-specific-meta">Render entry specific meta</h2>
+<p>To output entry specific meta you must add either the <code class="param" data-tag="exp:nsm_better_meta:template">entry_id</code> or <code class="param" data-tag="exp:nsm_better_meta:template">url_title</code> parameter to the <code class="tag">&#123;exp:nsm_better_meta:template&#125;</code> tag.</p>
+<p>Lucky for us it is a requirement of the ExpressionEngine templating system that either an entry_id or the url_title in the url for specific entry pages. Knowing this allows us to use segment variables as parameter values in the <code class="tag">&#123;exp:nsm_better_meta:template&#125;</code> tag.</p>
+
+<h3 id="render-entry-specific-meta.example-1">Example 1: An entry id in the URL</h3>
+<p>URL: http://leevigraham.com/blog/post/3</p>
+<pre><code>&lt;head&gt;
+  &#123;exp:nsm_better_meta:template entry_id=<em>"&#123;segment_3&#125;</em>"&#125;
+&lt;/head&gt;</code></pre>
+
+<h3 id="render-entry-specific-meta.example-2">Example 2: A url title in the URL</h3>
+<p>URL: http://leevigraham.com/blog/post/my-post-url-title</p>
+<pre><code>&lt;head&gt;
+  &#123;exp:nsm_better_meta:template url_title="<em>&#123;segment_3&#125;</em>"&#125;
+&lt;/head&gt;</code></pre>
+
+<h3 id="render-entry-specific-meta.example-3">Example 3: A unique page url</h3>
+<p>Pages have custom unique URLS assigned in the Pages module that don't contain an <code>entry_id</code> or <code>url_title</code>. In this case we need to be a little more creative.</p>
+<p>URL: http://leevigraham.com/contact</p>
+<pre><code>&#123;exp:channel:entries require_entry="yes"&#125;
+  &#123;if no_results&#125;&#123;redirect="404"&#125;&#123;/if&#125;
+  &lt;head&gt;
+    &#123;exp:nsm_better_meta:template entry_id="<em>&#123;entry_id&#125;</em>"&#125;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;&#123;title&#125;&lt;/h1&gt;
+&#123;/exp:channel:entries&#125;
+
+    &#123;-- Use dynamic=&quot;off&quot; to dislay entries from a second channel --&#125;
+    &lt;ol&gt;
+      &#123;exp:channel:entries channel="some_other_blog" dynamic="off"&#125;
+        &lt;li&gt;&#123;title&#125;&lt;/li&gt;
+      &#123;/exp:channel:entries&#125;
+    &lt;/ol&gt;
+  &lt;/body&gt;</code></pre>
+<p>The URL above renders a single entry page after matching the page URL. The only way to get the entries ID is to wrap the <code class="tag">&#123;exp:nsm_better_meta:template&#125;</code> tag in an <code><a href="http://expressionengine.com/user_guide/modules/channel/channel_entries.html">&#123;exp:channel:entries&#125;</a></code> tag and explicitly pass the entries id.</p>
+
+<h2 id="render-homepage-specific-meta">Render homepage specific meta</h2>
+<p>In some cases the site homepage requires special treatment to ensure optimised SEO. This usually requires hiding the default site title and adding a more explicit title.</p>
+<pre><code>&lt;head&gt;
+  &#123;!-- Override the page title and hide the default site title --&#125;
+  &#123;exp:nsm_better_meta:template
+    title="Super amazing unique homepage title"
+    hide_site_title = "y"
+  &#125;
+&lt;/head&gt;</code></pre>
+
+<h2 id="render-category-archive-meta">Render category archive meta</h2>
+<p>Category meta requires a slightly different approach because there is no entry attached to the URL. In the example below we will output the meta for the "family pics" category archive using the <a href="http://expressionengine.com/modules/channel/category_heading.html">{exp:channel:category_heading}</a> tag.</p>
+<p>URL: http://leevigraham.com/gallery/category-archive/category/family-pics</p>
+<p>Template:</p>
+<pre><code>&lt;head&gt;
+  &#123;!-- Get the category information --&#125;
+  &#123;exp:channel:category_heading channel="photo_blog"&#125;
+    &#123;!--
+      Overide the default page title with the category name.
+      Add "Photo Gallery" to the page title using the title_suffix parameter
+    --&#125;
+    &#123;exp:nsm_better_meta:template
+      title="<em>&#123;category_name&#125;</em>"
+      title_suffix="Photo Gallery"
+      description="<em>&#123;category_description&#125;</em>"
+    &#125;
+  &#123;/exp:channel:category_heading&#125;
+&lt;/head&gt;</code></pre>
+<p>Output:</p>
+<pre><code>&lt;head&gt;
+  &lt;title&gt;Family Pics | Photo Gallery | Site Title&lt;/title&gt;
+  &lt;meta name="description" content="Pics from our family holiday" /&gt;
+&lt;/head&gt;</code></pre>
+<p>More information on <code>&#123;exp:channel:category_heading&#125;</code> the can be found in the <a href="http://expressionengine.com/modules/channel/category_heading.html">ExpressionEngine documentation</a>.</p>
+
+<h2 id="using-a-global-header-embed">Using a global header embed</h2>
+<p>In the majority of site builds there is an embedded global header template embed. This template should include the <code class="tag">&#123;exp:nsm_better_meta:template&#125;</code> tag. The basic idea is that the tag parameters are passed through the header embed as embed parameters and then into the tag.</p>
+<h3>Example primary template</h3>
+<p>Using the URL title example above the template with an embedded header would look like:</p>
+<pre><code>&lt;html&gt;
+  &#123;embed="_partials/.header" entry_id=<em>"&#123;segment_3&#125;</em>"&#125;
+&lt;/html&gt;</code></pre>
+<h3>Example header embed template</h3>
+<p><code class="tag">&#123;exp:nsm_better_meta:template&#125;</code> will automatically inherit the embed params. IE: if the header embed has an <code>entry_id</code> parameter <code class="tag">&#123;exp:nsm_better_meta:template&#125;</code> will inherit it's value.</p>
+<p>The inherit behavior means that tag parameters do not need to be explicitly defined.</p>
+<p>The "_partials/.header" template:</p>
+<pre><code>&lt;head&gt;
+  &#123;exp:nsm_better_meta:template&#125;
+&lt;/head&gt;</code></pre>
+
+<h2 id="render-an-xml-sitemap">Render an XML sitemap</h2>
+<p>Firstly create a new template group and name it <code>xml-sitemaps</code>. Next, create a new template in the <code>xml-sitemaps</code> group called "blog" (or news or whatever your channel is) &amp; set it's type to XML. <strong>Note: Double check the template type is XML or your sitemap will not render correctly.</strong></p>
+<p>In the "blog" template output the channel entries using the <code class="tag">&#123;exp:nsm_better_meta:entries_xml&#125;</code> tag.</p>
+<p>You can submit a single sitemap to Google but the prefered method is to add each of the channel XML sitemap files to an <a href="http://www.sitemaps.org/protocol.php#index">sitemap index file</a>.</p>
+
+<h3 id="render-an-xml-sitemap.outputting-channel-entries">Outputting channel entries</h3>
+<p>The recommended way of creating sitemap entries is by using the <code class="tag">&#123;exp:nsm_better_meta:entries_xml&#125;</code> tag. An example below renders 500 entries from the "blog" channel where the entry status is "not closed". The <a href="#exp:nsm_better_meta:entries_xml.parameters.loc">loc parameter</a> value variables will be replaced with entry specific values.</p>
+
+<pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"&gt;
+&#123;exp:nsm_better_meta:entries_xml
+  loc="http://test.com/blog/post/&#123;entry_id&#125;/&#123;url_title&#125;"
+  status="not closed"
+  channel="blog"
+&#125;
+&lt;/urlset&gt;</code></pre>
+<p>It's not a bad idea to include sitemap references to your channel category and monthly archive pages if they exist. This can easily be achieved using standard ExpressionEngine tags.</p>
+<p>The example below outputs the category archive index pages for each category in the "blog" channel using the <code><a href="http://expressionengine.com/user_guide/modules/channel/categories.html">&#123;exp:channel:categories&#125;</a></code> tag. Note that the <code>&lt;lastmod&gt;</code> (optional) isn't added to the output as there is no way to find this value.</p>
+<pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"&gt;
+&#123;exp:channel:categories
+  disable="category_fields"
+  show_empty="yes"
+  style="linear"
+  channel="blog"
+&#125;
+  &lt;url&gt;
+    &lt;loc&gt;http://test.com/blog/category-archive/cat/&#123;category_url_title&#125;/&lt;/loc&gt;
+    &lt;changefreq&gt;weekly&lt;/changefreq&gt;
+    &lt;priority&gt;0.5&lt;/priority&gt;
+  &lt;/url&gt;
+&#123;/exp:channel:categories&#125;
+&lt;/urlset&gt;</code></pre>
+
+<h3 id="render-an-xml-sitemap.complete-example">Complete example</h3>
+<p>Below is a complete example for the "blog" channel including index page, entries and category archive. We've hard coded the index page but you could just as easily use the <code><a href="http://expressionengine.com/user_guide/modules/channel/channel_entries.html">&#123;exp:channel:entries&#125;</a></code> tag to pull the last modified date.</p>
+
+<pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"&gt;
+  &#123;-- BLOG INDEX --&#125;
+  &lt;url&gt;
+    &lt;loc&gt;http://test.com/blog/&lt;/loc&gt;
+    &lt;lastmod&gt;&#123;current_time format="%Y-%m-%d"&#125;&lt;/lastmod&gt;
+    &lt;changefreq&gt;always&lt;/changefreq&gt;
+    &lt;priority&gt;1.0&lt;/priority&gt;
+  &lt;/url&gt;
+
+  &#123;-- BLOG ENTRIES --&#125;
+  &#123;exp:nsm_better_meta:entries_xml
+    loc="http://test.com/blog/post/&#123;entry_id&#125;/&#123;url_title&#125;"
+    status="not closed"
+    channel="blog"
+  &#125;
+
+  &#123;-- BLOG CATEGORY ARCHIVE PAGES --&#125;
+  &#123;exp:channel:categories
+    disable="category_fields"
+    show_empty="yes"
+    style="linear"
+    channel="blog"
+  &#125;
+    &lt;url&gt;
+      &lt;loc&gt;http://test.com/blog/category-archive/cat/&#123;category_url_title&#125;/&lt;/loc&gt;
+      &lt;changefreq&gt;weekly&lt;/changefreq&gt;
+      &lt;priority&gt;0.5&lt;/priority&gt;
+    &lt;/url&gt;
+  &#123;/exp:channel:categories&#125;
+&lt;/urlset&gt;</code></pre>
+<p class="note">If your sitemaps are getting too large, you may want to consider using <a href="http://www.sitemaps.org/protocol.php#index">Sitemap index files</a>.</p>
+
+<h3 id="render-an-xml-sitemap.submitting-your-sitemap-to-google">Submitting your sitemap to Google</h3>
+<p>Google doesn't like sitemaps to be located in your sites sub-folders. Removing the index.php file may possibly throw an error because <code>http://mysite.com/index.php?xml_sitemaps/index/</code> will be redirected as <code>http://mysite.com/xml_sitemaps/index/</code>. For this reason it's important to submit the full URL to Google including the <code>index.php</code>.</p>

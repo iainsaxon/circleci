@@ -1,0 +1,162 @@
+{layout='site/-layout'}
+
+{exp:channel:entries
+    channel="pages"
+    limit="1"
+    dynamic='no'
+    url_title="store-order-checkout"
+}
+
+{if no_results}{redirect="404"}{/if}
+
+{!-- Set entry id for better meta --}
+{layout:set name="entry_id" value="{entry_id}"}
+
+{!-- Additional Open Graph meta --}
+{layout:set name="og_image" value="{cf_page_feature_image:revved_url:facebook-2x}"}
+{layout:set name="og_image:height" value="{cf_page_feature_image:height:facebook-2x}"}
+{layout:set name="og_image:width" value="{cf_page_feature_image:width:facebook-2x}"}
+
+<h1>{title}</h1>
+
+{cf_page_content}
+
+{if cf_page_feature_image}
+<img
+    src="{cf_page_feature_image:revved_url:feature-1x}"
+    width="{cf_page_feature_image:width:feature-1x}"
+    height="{cf_page_feature_image:height:feature-1x}"
+    srcset="{cf_page_feature_image:revved_url:feature-2x} 2x"
+/>
+{/if}
+
+{/exp:channel:entries}
+
+{exp:store:checkout
+    next="store/order-details"
+}
+
+{if no_items}
+<div>Your cart is empty.</div>
+{/if}
+
+<h2>Your Order</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Unit Price</th>
+            <th>Quantity</th>
+            <th>Total</th>
+            <th>Remove</th>
+        </tr>
+    </thead>
+    <tbody>
+        {items}
+        <tr>
+            <td>
+                <a href="{path='products/details/{url_title}'}">{title} [{sku}]</a>
+                <ul>
+                    {modifiers}
+                        <li><strong>{modifier_name}:</strong> {modifier_value}</li>
+                    {/modifiers}
+                    {if free_shipping}
+                        <li><strong>Free Shipping:</strong> Yes</li>
+
+                    {/if}
+                </ul>
+            </td>
+            <td>
+                {price}
+                {if on_sale}<p>Was {regular_price}<br/>Save {you_save}</p>{/if}
+            </td>
+            <td><input type="number" name="items[{key}][item_qty]" value="{item_qty}" /></td>
+            <td>{item_subtotal}</td>
+            <td><input type="submit" name="remove_items[{key}]" value="Remove"/></td>
+        </tr>
+        {/items}
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="2"></td>
+            <td>Sub Total</td>
+            <td>{order_subtotal}</td>
+        </tr>
+
+        {if adjustments}
+        {adjustments}
+        <tr>
+            <td colspan="2"></td>
+            <td>{adjustment:name}</td>
+            <td>{adjustment:amount}</td>
+        </tr>
+        {/adjustments}
+        {/if}
+
+        {if order_discount_val}
+        <tr>
+            <td colspan="2"></td>
+            <td>Discount</td>
+            <td>{order_discount}</td>
+        </tr>
+        {/if}
+
+        {if order_shipping_val}
+        <tr>
+            <td colspan="2"></td>
+            <td>Shipping</td>
+            <td>
+                {if free_shipping}
+                Free Shipping!
+                {if:else}
+                {order_shipping}
+                {/if}
+            </td>
+        </tr>
+        {/if}
+
+        {if order_handling_val}
+        <tr>
+            <td colspan="2"></td>
+            <td>Handling</td>
+            <td>{order_handling}</td>
+        </tr>
+        {/if}
+
+        <tr>
+            <td colspan="2"></td>
+            <td>Total</td>
+            <td>{order_total}</td>
+        </tr>
+
+        {if tax_name}
+        <tr>
+            <td colspan="2"></td>
+            <td>{tax_name} ({tax_percent}%)</td>
+            <td>{order_tax}</td>
+        </tr>
+        {/if}
+
+    </tfoot>
+</table>
+
+<p>
+    Enter any special instructions or notes about this order:
+    <textarea name="order_custom1">{order_custom1}</textarea>
+</p>
+
+<p>
+    Do you have a promo code?
+    <input type="text" name="promo_code" value="{promo_code}" />
+    {if promo_code}
+    <input type="submit" name="remove_promo_code" value="Remove Promo Code"/>
+    {if:else}
+    <input type="submit" name="update_cart" value="Apply Promo Code" />
+    {/if}
+</p>
+
+<button type="submit" name="update_cart">Update Cart</button>
+<button type="submit" name="next">Continue</button>
+
+{/exp:store:checkout}

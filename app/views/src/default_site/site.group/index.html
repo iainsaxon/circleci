@@ -1,2 +1,84 @@
-{layout="site/-layout"}
-site/index
+{layout='site/-layout'}
+
+{exp:channel:entries
+    channel="homepages"
+    limit="1"
+    dynamic='no'
+
+    {if "{embed:get:cf_homepage_security_token}" != ""}
+        status="open|pending"
+        search:cf_homepage_security_token="{embed:get:cf_homepage_security_token}"
+    {/if}
+}
+
+{if no_results}{redirect="404"}{/if}
+
+{!-- Set entry id for better meta --}
+{layout:set name="entry_id" value="{entry_id}"}
+
+{!-- Additional Open Graph meta --}
+{layout:set name="og_image" value="{cf_homepage_feature_image:revved_url:facebook-2x}"}
+{layout:set name="og_image:height" value="{cf_homepage_feature_image:height:facebook-2x}"}
+{layout:set name="og_image:width" value="{cf_homepage_feature_image:width:facebook-2x}"}
+
+<h1>{title}</h1>
+
+{cf_homepage_content}
+
+<h2>Feature Carousel</h2>
+
+{cf_homepage_feature_carousel}
+{b_gallery_slide}
+    <h3>
+        <a href="{a_url}">{a_title} <small>- {a_sub_title}</small></a>
+    </h3>
+    <img
+        src="{a_feature_image:revved_url:feature-1x}"
+        width="{a_feature_image:width:feature-1x}"
+        height="{a_feature_image:height:feature-1x}"
+        srcset="{a_feature_image:revved_url:feature-2x} 2x"
+        />
+    {if a_feature_video}
+        {a_feature_video:embed width="1024" height="576" youtube:enablejsapi="1"}
+    {/if}
+{/b_gallery_slide}
+{/cf_homepage_feature_carousel}
+
+<h2>From the forums</h2>
+{embed="_forums/-entries"
+    topic_id="{cf_homepage_feature_form_posts}"
+    limit="10"
+}
+
+<h2>Most popular content</h2>
+{embed="topics/-entries"
+    entry_id="{exp:nsm_utils:relationship_child_ids entry_id='{entry_id}' field='cf_homepage_most_popular'}|-1"
+    limit="10"
+    paginate="none"
+    ad_position='4'
+}
+
+<h2>Products in the store</h2>
+{embed="products/-entries"
+    entry_id="{exp:nsm_utils:relationship_child_ids entry_id='{entry_id}' field='cf_homepage_related_products'}|-1"
+    limit="10"
+    paginate="none"
+}
+
+<h2>Shop by brand</h2>
+{embed="brands/-entries"
+    entry_id="{exp:nsm_utils:relationship_child_ids entry_id='{entry_id}' field='cf_homepage_related_brands'}|-1"
+    limit="10"
+    paginate="none"
+}
+
+<h2>New Articles</h2>
+{embed="articles/-entries"
+    category="{cf_topic_content_categories}"
+    limit="10"
+    paginate="none"
+    ad_position='4'
+    paginate_base='articles'
+}
+
+{/exp:channel:entries}

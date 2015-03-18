@@ -79,9 +79,9 @@ class EE_Output extends CI_Output {
 		{
 			$this->set_status_header(200);
 
-			$this->set_header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-			$this->set_header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
-			$this->set_header("Pragma: no-cache");
+//			$this->set_header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+//			$this->set_header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
+//			$this->set_header("Pragma: no-cache");
 		}
 
 

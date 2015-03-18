@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    {exp:channel:entries
+        channel='topics'
+        limit='{gv_sitemap_pagination_limit}'
+    }
+    <url>
+        <loc>{path="/{url_title}"}</loc>
+        <priority></priority>
+    </url>
+    <url>
+        <loc>{path="/{url_title}/articles"}</loc>
+        <priority></priority>
+    </url>
+    <url>
+        <loc>{path="/{url_title}/brands"}</loc>
+        <priority></priority>
+    </url>
+    <url>
+        <loc>{path="/{url_title}/places"}</loc>
+        <priority></priority>
+    </url>
+    <url>
+        <loc>{path="/{url_title}/products"}</loc>
+        <priority></priority>
+    </url>
+    <url>
+        <loc>{path="/{url_title}/promotions"}</loc>
+        <priority></priority>
+    </url>
+    <url>
+        <loc>{path="/{url_title}/tutorials"}</loc>
+        <priority></priority>
+    </url>
+    {/exp:channel:entries}
+</urlset>

@@ -1,0 +1,47 @@
+{layout='site/-layout'}
+
+{preload_replace:pr_this_index_limit="10"}
+
+{exp:channel:entries
+    channel='topics'
+    limit='1'
+    dynamic='no'
+    url_title='{segment_1}'
+}
+
+{if no_results}{redirect='404'}{/if}
+
+{!-- Set entry id for better meta --}
+{layout:set name='entry_id' value='{entry_id}'}
+{layout:set name='title_suffix' value='Articles - Page {exp:nsm_utils:page_number limit='{pr_this_index_limit}'}'}
+
+{!-- Additional Open Graph meta --}
+{layout:set name='og_image' value='{cf_page_feature_image:revved_url:facebook-2x}'}
+{layout:set name='og_image:height' value='{cf_page_feature_image:height:facebook-2x}'}
+{layout:set name='og_image:width' value='{cf_page_feature_image:width:facebook-2x}'}
+
+<h1>
+    {title} / {rr_search_shortcut_label}
+</h1>
+
+{embed='topics/-search-shortcuts-nav'
+        current_shortcut_name='{rr_search_shortcut_name}'
+        shortcut_group_id='{cf_topics_ls_shortcut_group_id}'
+}
+
+{if cf_page_feature_image}
+<img
+    src="{cf_page_feature_image:revved_url:feature-1x}"
+    width="{cf_page_feature_image:width:feature-1x}"
+    height="{cf_page_feature_image:height:feature-1x}"
+    srcset="{cf_page_feature_image:revved_url:feature-2x} 2x"
+/>
+{/if}
+
+{embed='topics/-entries'
+    category='{cf_topic_content_categories}'
+    limit='{pr_this_index_limit}'
+    shortcut='{rr_search_shortcut_name}'
+}
+
+{/exp:channel:entries}

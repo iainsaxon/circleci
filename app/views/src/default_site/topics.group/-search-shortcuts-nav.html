@@ -1,0 +1,12 @@
+<ul>
+    <li>
+        <a href="{path='{segment_1}'}">Everything</a>
+        {if embed:current_shortcut_name == ''}- current{/if}
+    </li>
+    {exp:low_search:shortcuts group_id='{embed:shortcut_group_id}'}
+    <li>
+        <a href="{path='{exp:nsm_utils:str_replace search="-" replace="/" subject="{shortcut_name}"}'}">{shortcut_label}</a>
+        {if shortcut_name == embed:current_shortcut_name}- current{/if}
+    </li>
+    {/exp:low_search:shortcuts}
+</ul>

@@ -691,7 +691,10 @@ class Low_search extends Low_search_base {
 		// Are we using a shortcut?
 		// --------------------------------------
 
-		$this->_get_shortcut();
+        if ($this->_get_shortcut() === array())
+        {
+            return $this->_no_results();
+        }
 
 		// --------------------------------------
 		// Get the latest Log ID

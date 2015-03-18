@@ -26,7 +26,7 @@ $plugin_info = array(
 class In
 {
 	//debug mode flag
-	private $debug = false;
+	private $debug = true;
 
 	/**
 	 * Constructor

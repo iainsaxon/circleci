@@ -1,33 +1,45 @@
 {
-  "name": "nsm/circleci",
-  "license": "MIT",
-  "type": "project",
-  "authors": [
-    {
-      "name": "Leevi Graham",
-      "email": "leevi@newism.com.au"
+    "name": "nsm/circleci",
+    "license": "MIT",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Leevi Graham",
+            "email": "leevi@newism.com.au"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:leevigraham/eecli.git"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Boardworld\\": "app/third_party/boardworld/src/"
+        }
+    },
+    "require": {
+    },
+    "require-dev": {
+        "eecli/eecli": "dev-master",
+        "wikimedia/composer-merge-plugin": "dev-master",
+        "phpspec/phpspec": "~2.1",
+        "behat/behat": "~3.0",
+        "behat/mink-extension": "~2.0",
+        "behat/mink-selenium2-driver": "~1.2",
+        "cevou/behat-screenshot-compare-extension": "~1.0@dev",
+        "behat/mink-goutte-driver": "~1.1@dev"
+    },
+    "minimum-stability": "dev",
+    "config": {
+        "bin-dir": "bin"
+    },
+    "extra": {
+        "merge-plugin": {
+            "include": [
+                "app/third_party/boardworld/composer.json"
+            ]
+        }
     }
-  ],
-  "repositories": [
-    {
-      "type": "vcs",
-      "url":  "git@github.com:leevigraham/eecli.git"
-    }
-  ],
-  "require": {
-    "eecli/eecli": "dev-master"
-  },
-  "require-dev": {
-    "phpspec/phpspec": "~2.1",
-    "behat/behat": "~3.0",
-    "behat/mink-extension": "~2.0",
-    "behat/mink-selenium2-driver": "~1.2",
-    "emuse/behat-html-formatter": "dev-master",
-    "cevou/behat-screenshot-compare-extension": "~1.0@dev",
-    "behat/mink-goutte-driver": "~1.1@dev"
-  },
-  "minimum-stability": "dev",
-  "config": {
-    "bin-dir": "bin"
-  }
 }

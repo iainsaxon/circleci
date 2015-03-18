@@ -4,7 +4,10 @@
 /var/cache
 /var/logs
 
-node_modules
+/node_modules
+/web/themes/site_themes/src/default_site/bower_components
+/web/themes/site_themes/src/default_site/styles
+
 /vendor
 /bin
 /tests

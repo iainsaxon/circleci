@@ -57,8 +57,9 @@
 						<h3><a href="#"><?=lang('fields')?></a></h3>
 						<div>
 							<ul>
-								<?php foreach ($field_list as $name => $field):?>
+								<?php var_dump($field_list); foreach ($field_list as $name => $field):?>
 									<li>
+                                        <?php echo $name; ?>
 									<?php if ($field['field_required'] == 'y'):?>
 										<a href="#" class="field_selector" id="hide_field_<?=$field['field_id']?>">
 											<?=required()?><?=$field['field_label']?>

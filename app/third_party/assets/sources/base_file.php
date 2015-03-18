@@ -97,6 +97,15 @@ abstract class Assets_base_file
 	abstract public function url($manipulation_name = '');
 
 	/**
+	 * Return the revved file URL
+	 *
+	 * @abstract
+	 * @param string $manipulation_name
+	 * @return string
+	 */
+	abstract public function revved_url($manipulation_name = '');
+
+	/**
 	 * Returns the server path for the file
 	 *
 	 * @param $manipulation_name

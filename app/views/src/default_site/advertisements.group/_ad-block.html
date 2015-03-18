@@ -1,0 +1,21 @@
+{exp:low_search:results
+    query='{segment_3}'
+    limit='1'
+    collection='advertisements'
+}
+    {if no_results}No Ad Found.{/if}
+    <p>
+    <a href="{cf_advertisement_outgoing_url}">
+        {title}
+        <img
+            src="{cf_advertisement_feature_image:revved_url}"
+            width="{cf_advertisement_feature_image:width}"
+            height="{cf_advertisement_feature_image:height}"
+        />
+    </a>
+    </p>
+    <p>
+        Impression Value: {cf_advertisement_impression_val}
+        Click Value: {cf_advertisement_click_val}
+    </p>
+{/exp:low_search:results}

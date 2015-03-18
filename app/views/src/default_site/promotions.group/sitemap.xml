@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    {exp:nsm_better_meta_new:sitemap_index
+        channel='promotions'
+        limit="{gv_sitemap_pagination_limit}"
+        paginate_base="promotions/sitemap-entries"
+    }
+        <sitemap>
+            <loc>{pagination_url}</loc>
+        </sitemap>
+    {/exp:nsm_better_meta_new:sitemap_index}
+</urlset>

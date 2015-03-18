@@ -1,0 +1,79 @@
+{layout='site/-layout'}
+
+{exp:channel:entries
+    channel="pages"
+    limit="1"
+    dynamic='no'
+    url_title="store-order-payment"
+}
+
+{if no_results}{redirect="404"}{/if}
+
+{!-- Set entry id for better meta --}
+{layout:set name="entry_id" value="{entry_id}"}
+
+{!-- Additional Open Graph meta --}
+{layout:set name="og_image" value="{cf_page_feature_image:revved_url:facebook-2x}"}
+{layout:set name="og_image:height" value="{cf_page_feature_image:height:facebook-2x}"}
+{layout:set name="og_image:width" value="{cf_page_feature_image:width:facebook-2x}"}
+
+<h1>{title}</h1>
+
+{cf_page_content}
+
+{if cf_page_feature_image}
+<img
+    src="{cf_page_feature_image:revved_url:feature-1x}"
+    width="{cf_page_feature_image:width:feature-1x}"
+    height="{cf_page_feature_image:height:feature-1x}"
+    srcset="{cf_page_feature_image:revved_url:feature-2x} 2x"
+/>
+{/if}
+
+{exp:store:checkout
+    return="store/order-receipt/ORDER_HASH"
+}
+
+{if no_items}
+<div>Your cart is empty.</div>
+{/if}
+
+<h2>Payment Details</h2>
+
+{if error:payment_method}
+{error:payment_method}
+{/if}
+
+<div>
+    How would you like to pay for your order?
+    <label><input type="radio" name="payment_method" value="dummy"> Dummy</label>
+    <label><input type="radio" name="payment_method" value="paypal"> PayPal</label>
+    <label><input type="radio" name="payment_method" value="stripe"> Credit Card</label>
+</div>
+
+
+<div><label>Number: <input type="text" name="payment[number]" value=""/></label></div>
+<div>
+    <label>
+        Exp Month:
+        <select name="payment[exp_month]">
+            <option value=""></option>
+            {exp_month_options}
+        </select>
+    </label>
+</div>
+<div>
+    <label>
+        Exp Year:
+        <select name="payment[exp_year]">
+            <option value=""></option>
+            {exp_year_options}
+        </select>
+    </label>
+</div>
+<div><label>CVC: <input type="text" name="payment[csc]" value=""/></label></div>
+
+<button type="submit" name="submit">Place Order</button>
+
+{/exp:store:checkout}
+{/exp:channel:entries}

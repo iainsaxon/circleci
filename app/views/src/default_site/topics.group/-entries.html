@@ -1,0 +1,51 @@
+<div>
+    {exp:low_search:results
+        entry_id='{embed:entry_id}'
+        category='{embed:category}'
+        limit='{embed:limit}'
+        shortcut="{embed:shortcut}"
+        query="{embed:query}"
+        paginate='bottom'
+        dynamic='no'
+    }
+
+    {if no_results}<div>No Results</div>{/if}
+
+    {if embed:ad_position == count}
+        {embed='advertisements/-ad-placeholder'}
+    {/if}
+
+    <div>
+    {exp:switchee variable='{channel_name}' parse='inward'}
+
+        {case value="articles"}
+        {in:sert:articles/-card}
+        {/case}
+
+        {case value="brands"}
+        {in:sert:brands/-card}
+        {/case}
+
+        {case value="places"}
+        {in:sert:places/-card}
+        {/case}
+
+        {case value="products"}
+        {in:sert:products/-card}
+        {/case}
+
+        {case value="promotions"}
+        {in:sert:promotions/-card}
+        {/case}
+
+        {case value="tutorials"}
+        {in:sert:tutorials/-card}
+        {/case}
+
+    {/exp:switchee}
+    </div>
+
+    {in:sert:site/-pagination}
+
+    {/exp:low_search:results}
+</div>

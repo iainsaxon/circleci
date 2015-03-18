@@ -1,0 +1,12 @@
+{exp:query sql="SELECT `action_id` FROM `exp_actions` WHERE class='Low_search' AND method='catch_search'"}
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    {exp:low_search:popular
+        limit="{gv_sitemap_pagination_limit}"
+    }
+    <url>
+        <loc>{site_url}?ACT={action_id}&amp;keywords={keywords}</loc>
+    </url>
+    {/exp:low_search:popular}
+</urlset>
+{/exp:query}

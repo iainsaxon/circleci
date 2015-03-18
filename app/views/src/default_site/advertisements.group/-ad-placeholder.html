@@ -1,0 +1,12 @@
+<p>
+    {if embed:ad_search_query}
+        <a href="{exp:low_search:url result_page='advertisements/_ad-block' {embed:ad_search_query}}">View advertisement</a>
+        Params: <code>{embed:ad_search_query}</code>
+    {if:elseif embed:topic_category_id}
+        <a href="{exp:low_search:url result_page='advertisements/_ad-block' category='{embed:topic_category_id}'}">View advertisement</a>
+        Params: <code>category='{embed:topic_category_id}'</code>
+    {if:else}
+        <a href="{exp:low_search:url result_page='advertisements/_ad-block'}">View advertisement</a>
+        Params: <code>none</code>
+    {/if}
+</p>

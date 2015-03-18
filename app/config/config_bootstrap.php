@@ -43,6 +43,8 @@ if (true === isset($config)) {
 
         'gv_debug' => ENV_DEBUG,
 
+        'gv_sitemap_pagination_limit' => 5,
+
         // Campaign Monitor
         'gv_cm_subscriber_list_key' => '',
 
@@ -83,7 +85,35 @@ if (true === isset($config)) {
 
     $routes = include(__DIR__ . "/routes.php");
 
+    $uploadPreferences = array();
+    $uploadFolders = array(
+        // Standard Content
+        1 => 'Homepage',
+        2 => 'Page',
+        3 => 'Topic',
+        // Channel Content
+        4 => 'Article',
+        5 => 'Brand',
+        6 => 'Place',
+        7 => 'Product',
+        8 => 'Promotion',
+        9 => 'Tutorial',
+        10 => 'Advertisement',
+        11 => 'Feature Carousel',
+    );
+
+    foreach($uploadFolders as $id => $folderName) {
+        $uploadPreferences[$id] = array(
+            'name' => $folderName . ' Images',
+            'server_path' => $basePath . '/web/uploads/content/' . str_replace(' ', '-', strtolower($folderName)) . '/',
+            'url' => $siteUrl . '/uploads/content/' . str_replace(' ', '-', strtolower($folderName)) . '/',
+            'allowed_types' => 'img'
+        );
+    }
+
     $defaultConfig = array(
+
+        'upload_preferences' => $uploadPreferences,
 
         // Disable built-in routing in favour of rsanchez/resource_router
         // See: https://github.com/rsanchez/resource_router
@@ -117,7 +147,7 @@ if (true === isset($config)) {
         'third_party_path' => $appPath . '/third_party',
         'path_third_themes' => $webPath . '/themes/third_party',
         'url_third_themes' => $siteUrl . '/themes/third_party/',
-        'cache_path' => $basePath . '/var/cache',
+        'cache_path' => $basePath . '/var/cache/',
 
         // Encryption / Session key
         'encryption_key' => '8Vq7AtEXgCH6FFhafiiE4rfsddgfnjXB',
@@ -273,7 +303,7 @@ if (true === isset($config)) {
 
         // Members - Member Preferences - Avatar Preferences
         'enable_avatars' => 'y',
-        'allow_avatar_uploads' => 'n',
+        'allow_avatar_uploads' => 'y',
         'avatar_url' => $siteUrl . '/uploads/member/avatars/',
         'avatar_path' => $basePath . '/web/uploads/member/avatars/',
         'avatar_max_width' => 512,
@@ -289,10 +319,10 @@ if (true === isset($config)) {
         'photo_max_kb' => 1000,
 
         // Members - Member Preferences - Signature Preferences
-        'allow_signatures' => 'n',
+        'allow_signatures' => 'y',
         'sig_maxlength' => 1000,
         'sig_allow_img_hotlink' => 'y',
-        'sig_allow_img_upload' => 'n',
+        'sig_allow_img_upload' => 'y',
         'sig_img_url' => $siteUrl . '/uploads/member/signature_attachments/',
         'sig_img_path' => $webPath . '/uploads/member/signature_attachments',
         'sig_img_max_width' => 512,
@@ -301,17 +331,18 @@ if (true === isset($config)) {
 
         // Design - Template Manager - Global Template Preferences
         'strict_urls' => 'y',
-        'site_404' => 'site/four04',
+        'site_404' => 'site/-four04',
         'save_tmpl_revisions' => 'y',
         'max_tmpl_revisions' => 30,
         'save_tmpl_files' => 'y',
         'tmpl_file_basepath' => $appPath . '/views/' . $srcOrProd,
 
-
         // Forum Module
-        'forum_is_installed' => 'n',
+        'forum_is_installed' => 'y',
         'forum_trigger' => 'forums',
         'use_forum_url' => 'y',
+        'board_upload_url' => $siteUrl . '/uploads/member/forum_attachments/',
+        'board_upload_path' => $webPath . '/uploads/member/forum_attachments',
     );
 
     $config = array_merge($config, $defaultConfig, $parameters["config"]);

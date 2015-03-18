@@ -1,0 +1,12 @@
+<div>
+<h3><a href="{url_title_path='places/details'}">{title}</a> {if cf_place_feature_video}w/ Video{/if}</h3>
+{if cf_place_thumbnail_image}
+<img
+    src="{cf_place_thumbnail_image:revved_url:thumbnail-1x}"
+    width="{cf_place_thumbnail_image:width:thumbnail-1x}"
+    height="{cf_place_thumbnail_image:height:thumbnail-1x}"
+    srcset="{cf_place_thumbnail_image:revved_url:thumbnail-2x} 2x"
+    />
+{/if}
+{cf_place_content}
+</div>

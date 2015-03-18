@@ -1,0 +1,171 @@
+<h2 class="tag" id="exp:nsm_better_meta:template"><code>&#123;exp:nsm_better_meta:template&#125;</code></h2>
+<pre data-tag='exp:nsm_better_meta:template' class='tag-description'><code>&#123;exp:nsm_better_meta:template
+([
+    int <span class="param">entry_id</span>
+    string <span class="param">url_title</span>
+    string <span class="param">title</span>
+    string <span class="param">title_prefix</span>
+    string <span class="param">title_suffix</span>
+    string <span class="param">hide_site_title</span>
+    string <span class="param">description</span>
+    string <span class="param">keywords</span>
+    string <span class="param">author</span>
+    string <span class="param">publisher</span>
+    string <span class="param">rights</span>
+    string <span class="param">date_created</span>
+    string <span class="param">date_modified</span>
+    string <span class="param">date_valid</span>
+    string <span class="param">identifier</span>
+    string <span class="param">robots_index</span>
+    string <span class="param">robots_follow</span>
+    string <span class="param">robots_archive</span>
+    string <span class="param">canonical_url</span>
+    string <span class="param">region</span>
+    string <span class="param">latitude</span>
+    string <span class="param">longitude</span>
+])&#125;</code></pre>
+<p>This tag renders the <a href="./user-guide#configuration.extension-settings.metadata-template">metadata template</a> in your template replacing the placeholder tags with their corresponding meta values.</p>
+<p>Without any parameters this tag will render the <a href="./user-guide#configuration.extension-settings.default-site-meta">default site meta</a>. To render entry specific meta the <code class="param" data-tag="exp:nsm_better_meta:template">entry_id</code> or <code class="param" data-tag="exp:nsm_better_meta:template">url_title</code> parameter <strong>must</strong> be included. Refer to the <a href="./tutorials#render-entry-specific-meta">tutorial documentation</a> for implementation examples.</p>
+
+<h3 id="exp:nsm_better_meta:template.parameters" class="params">Parameters</h3>
+
+<h4 data-tag="exp:nsm_better_meta:template" title="entry_id"><code>entry_id</code> <small>[optional]</small></h4>
+<pre><kbd>entry_id="1"</kbd></pre>
+<pre><kbd>// Get the Entry ID from the URL
+entry_id="&#123;segment_3&#125;"</kbd></pre>
+<p>The entry id of the target channel entry. To display entry specific meta either <code class="param" data-tag="exp:nsm_better_meta:template">entry_id</code> or <code class="param" data-tag="exp:nsm_better_meta:template">url_title</code> is required.</p>
+
+<h4 data-tag="exp:nsm_better_meta:template" title="url_title"><code>url_title</code> <small>[optional]</small></h4>
+<pre><kbd>url_title="some-page-url-title"</kbd></pre>
+<pre><kbd>// Get the URL title from the URL
+url_title="&#123;segment_3&#125;"</kbd></pre>
+<p>The url title of the target channel entry. To display entry specific meta either <code class="param" data-tag="exp:nsm_better_meta:template">entry_id</code> or <code class="param" data-tag="exp:nsm_better_meta:template">url_title</code> is required.</p>
+
+<h4 data-tag="exp:nsm_better_meta:template" title="title"><code>title</code> <small>[optional]</small></h4>
+<pre><kbd>title="NSM Better Meta"</kbd></pre>
+<p>Overrides the entry title and is prepended to the site title, separated by the <a href="./user-guide#configuration.extension-settings.default-site-meta.page-title-divider">page title divider</a>.</p>
+
+<h4 data-tag="exp:nsm_better_meta:template" title="title_prefix"><code>title_prefix</code> <small>[optional]</small></h4>
+<pre><kbd>title_prefix="New"</kbd></pre>
+<p>The title prefix will be prepended to the meta title separated by the <a href="./user-guide#configuration.extension-settings.default-site-meta.page-title-divider">page title divider</a>.</p>
+
+<h4 data-tag="exp:nsm_better_meta:template" title="title_suffix"><code>title_suffix</code> <small>[optional]</small></h4>
+<pre><kbd>title_suffix="Documentation"</kbd></pre>
+<p>The title suffix will be appended to the meta title separated by the <a href="./user-guide#configuration.extension-settings.default-site-meta.page-title-divider">page title divider</a>.</p>
+
+<h4 data-tag="exp:nsm_better_meta:template" title="hide_site_title"><code>hide_site_title</code> <small>[optional]</small></h4>
+<pre><kbd>hide_site_title="y|n"</kbd></pre>
+<p>Remove the site title from the title meta element.</p>
+<p><em>Example:</em> The site title is: "Newism Web Design &amp; Development". Using the the <code class="param" data-tag="exp:nsm_better_meta:template">title</code>, <code class="param" data-tag="exp:nsm_better_meta:template">title_suffix</code> and <code class="param" data-tag="exp:nsm_better_meta:template">title_prefix</code> parameter values above the output would be:</p>
+<pre><code>New | NSM Better Meta | Documentation | Newism Web Design &amp; Development</code></pre>
+<p>Adding <code>hide_site_title="y"</code> to the template tag would produce:</p>
+<pre><code>New | NSM Better Meta | Documentation</code></pre>
+<p>See <a href="./tutorials#render-homepage-specific-meta">Render homepage specific meta</a> for another example.</p>
+
+<h4 data-tag="exp:nsm_better_meta:template" title="description"><code>description</code> <small>[optional]</small></h4>
+<pre><kbd>description="Add meta data to your ExpressionEngine entries
+using NSM Better Meta."</kbd></pre>
+<p>Override the entry or default meta description.</p>
+<p>Google displays the description in its search results under the page title. To display correctly in Google search results the description should be no longer than 150 characters.</p>
+
+<h4 data-tag="exp:nsm_better_meta:template" title="keywords"><code>keywords</code> <small>[optional]</small></h4>
+<pre><kbd>keywords="NSM Better Meta, ExpressionEngine, Extensions, Plugins, 
+Search Engine Optimisation, SEO, Newcastle Web Design and Development"</kbd></pre>
+<p>Override the entry or default keywords meta.</p>
+
+<h4 data-tag="exp:nsm_better_meta:template" title="author"><code>author</code> <small>[optional]</small></h4>
+<pre><kbd>author="Leevi Graham"</kbd></pre>
+<p>Override the entry or default author meta.</p>
+
+<h4 data-tag="exp:nsm_better_meta:template" title="publisher"><code>publisher</code> <small>[optional]</small></h4>
+<pre><kbd>publisher="Newism Web Design &amp;amp; Development"</kbd></pre>
+<p>Override the entry or default publisher meta.</p>
+
+<h4 data-tag="exp:nsm_better_meta:template" title="rights"><code>rights</code> <small>[optional]</small></h4>
+<pre><kbd>rights="Creative Commons Attribution-Noncommercial-Share Alike 3.0 Unported 
+license (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+unless otherwise stated"</kbd></pre>
+<p>Override the entry or default rights meta.</p>
+
+<h4 data-tag="exp:nsm_better_meta:template" title="date_created"><code>date_created</code> <small>[optional]</small></h4>
+<pre><kbd>date_created="2007-09-16T19:20:30+01:00"</kbd></pre>
+<p>Override the entry or default date created meta. This value must be in the <a href="http://www.w3.org/TR/NOTE-datetime">W3C date format</a>.</p>
+<p>ExpressionEngine provides an easy way to <a href="http://expressionengine.com/user_guide/templates/date_variable_formatting.html">create dates in the W3C format</a>.</p>
+
+<h4 data-tag="exp:nsm_better_meta:template" title="date_modified"><code>date_modified</code> <small>[optional]</small></h4>
+<pre><kbd>date_modified="2007-09-16T19:20:30+01:00"</kbd></pre>
+<p>Override the entry or default date modified meta. This value must be in the <a href="http://www.w3.org/TR/NOTE-datetime">W3C date format</a>.</p>
+<p>ExpressionEngine provides an easy way to <a href="http://expressionengine.com/user_guide/templates/date_variable_formatting.html">create dates in the W3C format</a>.</p>
+
+<h4 data-tag="exp:nsm_better_meta:template" title="date_valid"><code>date_valid</code> <small>[optional]</small></h4>
+<pre><kbd>date_valid="2007-09-16T19:20:30+01:00"</kbd></pre>
+<p>Override the entry or default date valid meta. This value must be in the <a href="http://www.w3.org/TR/NOTE-datetime">W3C date format</a>.</p>
+<p>ExpressionEngine provides an easy way to <a href="http://expressionengine.com/user_guide/templates/date_variable_formatting.html">create dates in the W3C format</a>.</p>
+
+<h4 data-tag="exp:nsm_better_meta:template" title="identifier"><code>identifier</code> <small>[optional]</small></h4>
+<pre><kbd>identifier="http://newism.com.au"</kbd></pre>
+<p>Override the entry or default identifier. The identifier value is an unambiguous reference to the resource within a given context, typically a URL.</p>
+
+<h4 data-tag="exp:nsm_better_meta:template" title="robots_index"><code>robots_index</code> <small>[optional]</small></h4>
+<pre><kbd>robots_index="y|n"</kbd></pre>
+<p>Specifying <code>index</code> will result in robots indexing the page and displaying it in search engine ranking pages while <code>noindex</code> will exclude the page.</p>
+
+<h4 data-tag="exp:nsm_better_meta:template" title="robots_follow"><code>robots_follow</code> <small>[optional]</small></h4>
+<pre><kbd>robots_follow="y|n"</kbd></pre>
+<p>Specifying <code>follow</code> will result in robots following external links in the page while <code>nofollow</code> will result in links not being followed.</p>
+
+<h4 data-tag="exp:nsm_better_meta:template" title="robots_archive"><code>robots_archive</code> <small>[optional]</small></h4>
+<pre><kbd>robots_archive="y|n"</kbd></pre>
+<p>Specifying <code>archive</code> will result in robots archiving the page while <code>noarchive</code> will result in robots not archiving the page.</p>
+
+<h4 data-tag="exp:nsm_better_meta:template" title="canonical_url"><code>canonical_url</code> <small>[optional]</small></h4>
+<pre><kbd>canonical_url="http://example.com/blog/&#123;entry_id&#125;/&#123;url_title&#125;"</kbd></pre>
+<p>Override the canonical URL. If your site has multiple URLs showing the same content, you should designate a particular URL to be the canonical (i.e. authorised and true) reference. This is used by search engines so that instead of distributing the content relevance among multiple URLs, they will all be collated to the canonical form.</p>
+
+<h4 data-tag="exp:nsm_better_meta:template" title="region"><code>region</code> <small>[optional]</small></h4>
+<pre><kbd>region="AU-NSW"</kbd></pre>
+<p>Override the resource region. For more information on geolocation, see <a href="./user-guide#configuration.extension-settings.default-site-meta.geolocation-defaults">Geolocation meta defaults</a>.</p>
+
+<h4 data-tag="exp:nsm_better_meta:template" title="placename"><code>placename</code> <small>[optional]</small></h4>
+<pre><kbd>placename="Newcastle"</kbd></pre>
+<p>Override the resource placename.</p>
+
+<h4 data-tag="exp:nsm_better_meta:template" title="latitude"><code>latitude</code> <small>[optional]</small></h4>
+<pre><kbd>latitude="-32.9167"</kbd></pre>
+<p>Override the resource latitude.</p>
+
+<h4 data-tag="exp:nsm_better_meta:template" title="longitude"><code>longitude</code> <small>[optional]</small></h4>
+<pre><kbd>longitude="151.7667"</kbd></pre>
+<p>Override the resource longitude.</p>
+
+
+
+<h2 class="tag" id="exp:nsm_better_meta:entries_xml"><code>&#123;exp:nsm_better_meta:entries_xml&#125;</code></h2>
+<pre data-tag='exp:nsm_better_meta:entries_xml' class='tag-description'><code>&#123;exp:nsm_better_meta:entries_xml
+([
+    string <span class="param">loc</span>,
+    string <span class="param">use_page_url</span>,
+])&#125;</code></pre>
+<p>This tag renders an XML sitemap directly to the template. Refer to the "<a href="./tutorials#render-an-xml-sitemap">Render an XML sitemap</a>" tutorial for implementation examples.</p>
+<h3 class="params">Parameters</h3>
+<p>This tag accepts all the parameters available in <code><a href="http://expressionengine.com/user_guide/modules/channel/channel_entries.html">&#123;exp:channel:entries&#125;</a></code> tag with the following parameter defaults:</p>
+<pre><code>disable="categories|custom_fields|category_fields|member_data|pagination"
+dynamic="off"
+limit="500"
+rdf="off"</code></pre>
+<p>Additionally the tag also accepts the following extra parameters:</p>
+
+<h4 data-tag="exp:nsm_better_meta:entries_xml" title="loc"><code>loc</code> <small>[optional]</small></h4>
+<pre><kbd>loc="/blog/post/&#123;url_title&#125;"</kbd></pre>
+<p>The loc parameter is used as the value for the <a href="http://www.sitemaps.org/protocol.php#locdef"><code>&lt;loc&gt;</code> XML element</a>. It points the entry URL and can include variable placeholders that will be replaced with entry specific values. The following variable placeholders will be replaced:</p>
+<ol>
+	<li><kbd>&#123;entry_id&#125;</kbd></li>
+	<li><kbd>&#123;url_title&#125;</kbd></li>
+	<li><kbd>&#123;site_id&#125;</kbd></li>
+	<li><kbd>&#123;channel_id&#125;</kbd></li>
+</ol>
+
+<h4 data-tag="exp:nsm_better_meta:entries_xml" title="use_page_url"><code>use_page_url</code> <small>[optional]</small></h4>
+<pre><kbd>use_page_url="yes"</kbd></pre>
+<pre><kbd>use_page_url="no"</kbd></pre>
+<p>If the entry has a page url (Pages &amp; Structure module) then you can choose to override the <code class="param" data-tag="exp:nsm_better_meta:entries_xml">loc</code> parameter value.</p>

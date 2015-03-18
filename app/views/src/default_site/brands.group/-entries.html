@@ -1,0 +1,20 @@
+<div>
+    {exp:channel:entries
+        channel='brands'
+        entry_id='{embed:entry_id}'
+        category='{embed:category}'
+        limit='{embed:limit}'
+        paginate='{embed:paginate}'
+        dynamic='no'
+    }
+        {if no_results}<div>No Brands</div>{/if}
+
+        {if embed:ad_position == count}
+            {embed='advertisements/-ad-placeholder'}
+        {/if}
+
+        {in:sert:brands/-card}
+        {in:sert:site/-pagination}
+
+    {/exp:channel:entries}
+</div>

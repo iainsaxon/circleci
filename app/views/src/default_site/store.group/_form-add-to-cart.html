@@ -1,0 +1,48 @@
+{exp:store:product
+    entry_id='{embed:entry_id}'
+    return='store/order-checkout'
+}
+
+{if total_stock > 0} In Stock {if:else} Out of Stock {/if}
+
+<p>
+    {if on_sale}
+        <del>{regular_price}</del>
+        <strong>{sale_price}</strong><br/>
+        Save {you_save}!
+    {if:else}
+        {price}
+    {/if}
+</p>
+
+{modifiers}
+<p>
+    <label>{modifier_name}</label><br/>
+    {if modifier_instructions}
+    <small>{modifier_instructions}</small>
+    <br/>{/if}
+    {if modifier_type == 'var' OR modifier_type == 'var_single_sku'}
+    <select name="{modifier_input_name}">
+        {modifier_options}
+        <option value="{option_id}">
+            {option_name}
+            {if price_mod_val} ({price_mod}) {/if}
+        </option>
+        {/modifier_options}
+    </select>
+    {if:else}
+    <input type="text" name="{modifier_input_name}"/>
+    {/if}
+</p>
+{/modifiers}
+
+<p>
+    <label>Quantity</label><br/>
+    <input type="text" name="item_qty" size="3" value="{min_order_qty}"/>
+</p>
+
+<p>
+    <button type="submit" name="submit">Add to cart</button>
+</p>
+
+{/exp:store:product}

@@ -6,13 +6,9 @@ default:
                 - Cevou\Behat\ScreenshotCompareExtension\Context\ScreenshotCompareContext
     formatters:
         pretty: true
-        html:
-            output_path: %paths.base%/tests/reports/behat/html
     extensions:
-        emuse\BehatHTMLFormatter\BehatHTMLFormatterExtension:
-            name: html
         Behat\MinkExtension:
-            base_url:  'http://local.circle'
+            base_url:  'http://local.example.com'
             default_session: goutte
             goutte: ~
             browser_stack:

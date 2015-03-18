@@ -1,0 +1,25 @@
+<div>
+    <h3><a href="{url_title_path='products/details'}">{title}</a></h3>
+
+    {exp:store:product entry_id='{entry_id}'}
+    <p>{if total_stock > 0} In Stock {if:else} Out of Stock {/if}</p>
+    <p>
+        {if on_sale}
+        Was <del>{regular_price}</del> Now <strong>{sale_price}</strong> Save {you_save}!
+        {if:else}
+        {price}
+        {/if}
+    </p>
+    {/exp:store:product}
+
+    {if cf_product_thumbnail_image}
+    <img
+        src="{cf_product_thumbnail_image:revved_url:thumbnail-1x}"
+        width="{cf_product_thumbnail_image:width:thumbnail-1x}"
+        height="{cf_product_thumbnail_image:height:thumbnail-1x}"
+        srcset="{cf_product_thumbnail_image:revved_url:thumbnail-2x} 2x"
+        />
+    {/if}
+
+    {cf_product_content}
+</div>

@@ -1,0 +1,10 @@
+<div>
+    <h3><a href="{url_title_path='promotions/details'}">{title}</a> {if cf_promotion_feature_video}w/ Video{/if}</h3>
+    <img
+        src="{cf_promotion_thumbnail_image:revved_url:thumbnail-1x}"
+        width="{cf_promotion_thumbnail_image:width:thumbnail-1x}"
+        height="{cf_promotion_thumbnail_image:height:thumbnail-1x}"
+        srcset="{cf_promotion_thumbnail_image:revved_url:thumbnail-2x} 2x"
+        />
+    {cf_promotion_content}
+</div>

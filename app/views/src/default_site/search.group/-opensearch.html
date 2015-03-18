@@ -1,0 +1,10 @@
+{exp:query sql="SELECT `action_id` FROM `exp_actions` WHERE class='Low_search' AND method='catch_search'"}
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/" xmlns:moz="http://www.mozilla.org/2006/browser/search/">
+    <ShortName>{site_name}</ShortName>
+    <Description>Search {site_name}</Description>
+    <Url type="text/html" method="get" template="{site_url}?ACT={action_id}&amp;keywords={searchTerms}" />
+    <Image height="16" width="16" type="image/vnd.microsoft.icon">/favicon.ico</Image>
+    <moz:SearchForm>{path="search"}</moz:SearchForm>
+    <Url type="application/opensearchdescription+xml" rel="self" template="{path='opensearch.xml'}"/>
+</OpenSearchDescription>
+{/exp:query}
