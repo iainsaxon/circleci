@@ -36,6 +36,7 @@ class ExportArticlesCommand extends Command
             'limit' => (int) $this->option('limit'),
             'offset' => (int) $this->option('offset'),
             'entry_ids' => array_filter(array_map('trim', explode(',', $this->option('entry_ids')))),
+            'pretty_json' => (bool) $this->option('pretty_json'),
         );
 
         // create a new database connection using these params and return the connector
@@ -52,7 +53,11 @@ class ExportArticlesCommand extends Command
         $oldDb->join('category_posts', 'category_posts.entry_id = channel_titles.entry_id');
         $oldDb->join('categories', 'categories.cat_id = category_posts.cat_id');
         $oldDb->group_by('channel_titles.entry_id');
-        $oldDb->select('*');
+        $oldDb->select('channel_titles.*');
+        $oldDb->select('channel_data.*');
+        $oldDb->select('members.member_id, members.username, members.screen_name');
+        $oldDb->select('channels.channel_name');
+        $oldDb->select('assets_files.file_id, assets_files.file_name, assets_files.filedir_id');
         $oldDb->select('GROUP_CONCAT(col_id_3 SEPARATOR "|") AS article_videos');
         $oldDb->select('GROUP_CONCAT(DISTINCT cat_url_title SEPARATOR "|") AS article_categories');
         $oldDb->where(array(
@@ -72,6 +77,12 @@ class ExportArticlesCommand extends Command
         $articles = array_map(function($a) use ($ee) {
             $formattedEntryDate = $ee->localize->format_date('%Y%m%d%H%i%s', $a['entry_date']);
             $formattedExpirationDate = $ee->localize->format_date('%Y%m%d%H%i%s', $a['expiration_date']);
+            $imageAsset = array(
+                'file_id' => (int) $a['file_id'],
+                'file_name' => $a['file_name'],
+                'filedir_id' => (int) $a['filedir_id'],
+                'caption' => $a['field_id_22'],
+            );
             $article = array(
                 'entry_id' => (int) $a['entry_id'],
                 'title' => $a['title'],
@@ -88,12 +99,7 @@ class ExportArticlesCommand extends Command
                     'screen_name' => $a['screen_name'],
                 ),
                 'article_type' => $a['field_id_30'],
-                'image_asset' => array(
-                    'file_id' => (int) $a['file_id'],
-                    'file_name' => $a['file_name'],
-                    'filedir_id' => (int) $a['filedir_id'],
-                    'caption' => $a['field_id_22'],
-                ),
+                'image_asset' => ($a['file_id'] > 0 ? $imageAsset : null),
                 'link_text' => $a['field_id_24'],
                 'videos' => explode('|', $a['article_videos']),
                 'article_body' => $a['field_id_25'],
@@ -103,7 +109,13 @@ class ExportArticlesCommand extends Command
 
         }, $getArticles->result_array());
 
-        $this->info(json_encode($articles));
+        if (true === $formattedOptions['pretty_json']) {
+            $output = json_encode($articles, JSON_PRETTY_PRINT);
+        } else {
+            $output = json_encode($articles);
+        }
+
+        $this->info($output);
     }
 
     /**
@@ -132,6 +144,12 @@ class ExportArticlesCommand extends Command
                 InputOption::VALUE_REQUIRED, // mode
                 'Comma-delimited list of entry IDs for articles to filter by', // description
                 '', // default value
+            ),
+            array(
+                'pretty_json', // name
+                'p', // shortcut
+                InputOption::VALUE_NONE, // mode
+                'Output JSON in pretty format', // description
             ),
 
         );
