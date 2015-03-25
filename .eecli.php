@@ -51,7 +51,7 @@ return array(
      * Assign variables to config
      */
     'assign_to_config' => array(
-        #'foo' => 'bar',
+        // 'foo' => 'bar',
     ),
 
     /**
@@ -61,7 +61,7 @@ return array(
      * custom commands.
      */
     'commands' => array(
-        #'\\Your\\Custom\\Command',
+        '\\Boardworld\\Command\\ExportArticlesCommand'
     ),
 
     /**

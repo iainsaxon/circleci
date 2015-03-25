@@ -34,6 +34,11 @@ if (!empty($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
     $scheme = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https' : 'http';
 }
 
+// This needs to be added to supress non-fatal errors in the console
+if (true === $isCli) {
+    error_reporting(E_ERROR | E_WARNING | E_PARSE);
+}
+
 $host = $_SERVER['HTTP_HOST'];
 $siteUrl = sprintf("%s://%s%s", $scheme, $host, $parameters["environment"]["baseUrl"]);
 
